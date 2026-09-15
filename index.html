@@ -1,0 +1,4474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#faf8f5">
+<title>MELLO — 31-Day Performance Planner</title>
+
+<style>
+:root{
+  --bg:#faf8f5;
+  --surface:#fffdf9;
+  --surface2:#f3efe9;
+  --text:#1f1f1d;
+  --muted:#6f6b65;
+  --line:#ddd7cf;
+  --accent:#6f7f68;
+  --accent-soft:#e9eee6;
+  --danger:#a85f58;
+  --shadow:0 12px 35px rgba(34,31,27,.06);
+  --radius-lg:24px;
+  --radius-md:16px;
+  --radius-sm:11px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",
+  Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.5;
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  color:inherit;
+}
+
+button,label,input[type="checkbox"]{
+  -webkit-tap-highlight-color:transparent;
+}
+
+.app{
+  width:min(1180px,calc(100% - 32px));
+  margin:auto;
+  padding:28px 0 60px;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:38px;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(111,127,104,.14),
+      transparent 36%
+    ),
+    var(--surface);
+  border:1px solid var(--line);
+  border-radius:30px;
+  box-shadow:var(--shadow);
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  right:-80px;
+  bottom:-120px;
+  width:300px;
+  height:300px;
+  border:1px solid rgba(111,127,104,.15);
+  border-radius:50%;
+  pointer-events:none;
+}
+
+.eyebrow{
+  margin:0 0 10px;
+  color:var(--accent);
+  font-size:.73rem;
+  font-weight:850;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+h1,h2,h3,p{
+  margin-top:0;
+}
+
+h1{
+  max-width:850px;
+  margin-bottom:14px;
+  font-size:clamp(2.4rem,6vw,4.8rem);
+  line-height:.96;
+  letter-spacing:-.06em;
+}
+
+.hero-description{
+  max-width:760px;
+  margin-bottom:26px;
+  color:var(--muted);
+}
+
+.hero-stats{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+
+.stat-card{
+  min-height:92px;
+  padding:15px;
+  background:rgba(255,253,249,.72);
+  border:1px solid var(--line);
+  border-radius:16px;
+}
+
+.stat-label{
+  display:block;
+  margin-bottom:6px;
+  color:var(--muted);
+  font-size:.7rem;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+.stat-value{
+  font-size:.96rem;
+  font-weight:800;
+  line-height:1.35;
+}
+
+/* ================= NAV ================= */
+
+.tabs{
+  position:sticky;
+  top:8px;
+  z-index:20;
+  display:flex;
+  gap:7px;
+  margin:18px 0;
+  padding:8px;
+  overflow-x:auto;
+  background:rgba(250,248,245,.93);
+  border:1px solid var(--line);
+  border-radius:16px;
+  backdrop-filter:blur(15px);
+  scrollbar-width:none;
+}
+
+.tabs::-webkit-scrollbar{
+  display:none;
+}
+
+.tab-btn{
+  flex:0 0 auto;
+  padding:10px 14px;
+  color:var(--muted);
+  font-size:.83rem;
+  font-weight:800;
+  background:transparent;
+  border:0;
+  border-radius:10px;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.tab-btn:hover{
+  color:var(--text);
+  background:var(--surface2);
+}
+
+.tab-btn.active{
+  color:#fff;
+  background:var(--text);
+}
+
+/* ================= PANELS ================= */
+
+.panel{
+  display:none;
+  animation:panelFade .2s ease;
+}
+
+.panel.active{
+  display:block;
+}
+
+@keyframes panelFade{
+  from{
+    opacity:.45;
+    transform:translateY(5px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.section-card{
+  margin-bottom:18px;
+  padding:27px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow);
+}
+
+.section-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:20px;
+  margin-bottom:21px;
+}
+
+.section-header h2{
+  margin-bottom:5px;
+  font-size:clamp(1.55rem,3vw,2.3rem);
+  letter-spacing:-.04em;
+}
+
+.section-header p{
+  margin-bottom:0;
+  color:var(--muted);
+}
+
+/* ================= EDITABLE ================= */
+
+[contenteditable="true"]{
+  outline:none;
+  border-radius:6px;
+  transition:.15s ease;
+}
+
+[contenteditable="true"]:hover{
+  background:rgba(111,127,104,.055);
+}
+
+[contenteditable="true"]:focus{
+  background:#fff;
+  box-shadow:0 0 0 2px rgba(111,127,104,.18);
+}
+
+.edit-hint{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:.72rem;
+}
+
+.save-status{
+  color:var(--accent);
+  font-size:.73rem;
+  font-weight:750;
+}
+
+/* ================= WEEKLY ================= */
+
+.weekly-grid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(150px,1fr));
+  gap:10px;
+  overflow-x:auto;
+  padding-bottom:5px;
+}
+
+.week-card{
+  min-width:150px;
+  padding:15px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:16px;
+}
+
+.week-day{
+  margin-bottom:10px;
+  color:var(--muted);
+  font-size:.71rem;
+  font-weight:850;
+  letter-spacing:.1em;
+}
+
+.week-focus{
+  min-height:62px;
+  margin-bottom:13px;
+  font-size:.92rem;
+  font-weight:850;
+  line-height:1.3;
+}
+
+.week-note{
+  padding-top:10px;
+  color:var(--muted);
+  font-size:.75rem;
+  border-top:1px solid var(--line);
+}
+
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:18px;
+}
+
+.legend-item,
+.category-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:6px 10px;
+  color:var(--muted);
+  font-size:.72rem;
+  font-weight:750;
+  white-space:nowrap;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:999px;
+}
+
+.legend-dot{
+  width:8px;
+  height:8px;
+  background:var(--accent);
+  border-radius:50%;
+}
+
+/* ================= TABLE ================= */
+
+.table-scroll{
+  overflow-x:auto;
+  border:1px solid var(--line);
+  border-radius:15px;
+}
+
+table{
+  width:100%;
+  min-width:720px;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:13px 14px;
+  vertical-align:middle;
+  text-align:left;
+  border-bottom:1px solid var(--line);
+}
+
+th{
+  color:var(--muted);
+  font-size:.7rem;
+  font-weight:850;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  background:var(--surface2);
+}
+
+tbody tr:last-child td{
+  border-bottom:0;
+}
+
+/* ================= DAILY ================= */
+
+.day-switcher{
+  display:flex;
+  gap:8px;
+  padding-bottom:8px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+
+.day-switcher::-webkit-scrollbar{
+  display:none;
+}
+
+.day-btn{
+  flex:0 0 auto;
+  padding:8px 13px;
+  color:var(--muted);
+  font-size:.8rem;
+  font-weight:800;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:999px;
+  cursor:pointer;
+}
+
+.day-btn.active{
+  color:#354034;
+  background:var(--accent-soft);
+  border-color:#cad4c5;
+}
+
+.schedule-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:18px;
+  margin:18px 0 14px;
+  padding-bottom:17px;
+  border-bottom:1px solid var(--line);
+}
+
+.schedule-top h3{
+  margin-bottom:4px;
+  font-size:clamp(1.6rem,3vw,2.2rem);
+  letter-spacing:-.04em;
+}
+
+.schedule-focus{
+  margin:0;
+  color:var(--muted);
+  font-weight:650;
+}
+
+.schedule-range{
+  padding:6px 10px;
+  color:var(--muted);
+  font-size:.71rem;
+  font-weight:800;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:999px;
+}
+
+.timeline{
+  position:relative;
+  display:grid;
+  gap:8px;
+}
+
+.timeline::before{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:127px;
+  width:1px;
+  background:var(--line);
+}
+
+.timeline-row{
+  position:relative;
+  display:grid;
+  grid-template-columns:110px 1fr;
+  align-items:start;
+  gap:36px;
+  min-height:52px;
+}
+
+.timeline-row::before{
+  content:"";
+  position:absolute;
+  top:16px;
+  left:122px;
+  z-index:2;
+  width:10px;
+  height:10px;
+  background:var(--surface);
+  border:2px solid var(--accent);
+  border-radius:50%;
+}
+
+.time{
+  padding-top:9px;
+  color:var(--muted);
+  font-size:.78rem;
+  font-weight:800;
+  text-align:right;
+}
+
+.activity-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  min-height:46px;
+  padding:10px 12px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+.activity-name{
+  font-size:.9rem;
+  font-weight:750;
+  line-height:1.35;
+}
+
+/* ================= TRACKER ================= */
+
+.tracker-header{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:16px;
+}
+
+.tracker-title h2{
+  margin-bottom:4px;
+  font-size:clamp(1.55rem,3vw,2.3rem);
+  letter-spacing:-.04em;
+}
+
+.tracker-title p{
+  margin:0;
+  color:var(--muted);
+}
+
+.progress-area{
+  flex:1;
+  min-width:230px;
+  max-width:420px;
+}
+
+.progress-info{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+  color:var(--muted);
+  font-size:.75rem;
+  font-weight:750;
+}
+
+.progress-track{
+  height:9px;
+  overflow:hidden;
+  background:var(--surface2);
+  border:1px solid var(--line);
+  border-radius:999px;
+}
+
+.progress-fill{
+  width:0;
+  height:100%;
+  background:var(--accent);
+  transition:width .25s ease;
+}
+
+.tracker th:not(:first-child),
+.tracker td:not(:first-child){
+  text-align:center;
+}
+
+.tracker td:first-child{
+  font-weight:850;
+}
+
+.tracker tr.completed-row td{
+  background:rgba(111,127,104,.04);
+}
+
+/* ================= CHECKBOX ================= */
+
+input[type="checkbox"]{
+  display:inline-grid;
+  place-content:center;
+  appearance:none;
+  width:20px;
+  height:20px;
+  margin:0;
+  background:#fff;
+  border:1.6px solid #aaa49d;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+input[type="checkbox"]::before{
+  content:"✓";
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  transform:scale(0);
+  transition:.12s ease;
+}
+
+input[type="checkbox"]:checked{
+  background:var(--accent);
+  border-color:var(--accent);
+}
+
+input[type="checkbox"]:checked::before{
+  transform:scale(1);
+}
+
+/* ================= RECOVERY ================= */
+
+.sleep-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.sleep-card{
+  padding:20px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:16px;
+}
+
+.sleep-card span{
+  display:block;
+  margin-bottom:5px;
+  color:var(--muted);
+  font-size:.7rem;
+  font-weight:850;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+.sleep-card strong{
+  font-size:1.25rem;
+  letter-spacing:-.03em;
+}
+
+.checklist-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.check-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px;
+  font-size:.88rem;
+  font-weight:750;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:14px;
+  cursor:pointer;
+}
+
+.check-item.checked{
+  background:var(--accent-soft);
+}
+
+/* ================= FOOD PLAN ================= */
+
+.food-intro{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:14px;
+  margin-bottom:18px;
+}
+
+.macro-main{
+  padding:22px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:17px;
+}
+
+.macro-main h3{
+  margin-bottom:7px;
+}
+
+.macro-main p{
+  margin-bottom:0;
+  color:var(--muted);
+  font-size:.86rem;
+}
+
+.macro-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+}
+
+.macro-card{
+  padding:16px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+.macro-card small{
+  display:block;
+  color:var(--muted);
+  font-size:.67rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.macro-card strong{
+  display:block;
+  margin-top:4px;
+  font-size:1.05rem;
+}
+
+.food-table{
+  min-width:1150px;
+}
+
+.food-table th,
+.food-table td{
+  font-size:.78rem;
+}
+
+.meal-name{
+  font-weight:850;
+  white-space:nowrap;
+}
+
+.food-cell{
+  max-width:220px;
+  line-height:1.45;
+}
+
+.food-macro{
+  white-space:nowrap;
+  color:var(--muted);
+}
+
+/* ================= SHOPPING ================= */
+
+.shopping-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.shop-category{
+  padding:20px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:17px;
+}
+
+.shop-category h3{
+  margin-bottom:13px;
+  font-size:1rem;
+}
+
+.shop-list{
+  display:grid;
+  gap:8px;
+}
+
+.shop-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.shop-item:last-child{
+  border-bottom:0;
+}
+
+.shop-item input{
+  flex:0 0 auto;
+}
+
+.shop-item span{
+  font-size:.82rem;
+  font-weight:650;
+}
+
+.shop-item.checked span{
+  color:var(--muted);
+  text-decoration:line-through;
+}
+
+.shopping-summary{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  margin-top:15px;
+  padding:15px;
+  background:var(--accent-soft);
+  border:1px solid #d6ded2;
+  border-radius:14px;
+}
+
+.shopping-summary strong{
+  font-size:.9rem;
+}
+
+/* ================= PRIORITY ================= */
+
+.priority-grid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(125px,1fr));
+  gap:9px;
+  overflow-x:auto;
+}
+
+.priority-card{
+  min-width:125px;
+  padding:15px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+.priority-number{
+  margin-bottom:15px;
+  color:var(--accent);
+  font-size:.7rem;
+  font-weight:900;
+  letter-spacing:.1em;
+}
+
+.priority-name{
+  font-size:.82rem;
+  font-weight:850;
+}
+
+/* ================= BUTTON ================= */
+
+.secondary-btn{
+  padding:9px 12px;
+  font-size:.77rem;
+  font-weight:800;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.secondary-btn:hover{
+  background:var(--surface2);
+}
+
+.danger-btn{
+  color:var(--danger);
+}
+
+/* ================= FOOTER ================= */
+
+.footer{
+  padding-top:22px;
+  color:var(--muted);
+  font-size:.8rem;
+  text-align:center;
+}
+
+.quote{
+  margin-top:8px;
+  color:var(--text);
+  font-size:.96rem;
+  font-weight:750;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1050px){
+
+  .hero-stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .weekly-grid{
+    grid-template-columns:repeat(7,170px);
+  }
+
+  .priority-grid{
+    grid-template-columns:repeat(7,145px);
+  }
+}
+
+@media(max-width:800px){
+
+  .food-intro{
+    grid-template-columns:1fr;
+  }
+
+  .shopping-grid{
+    grid-template-columns:1fr;
+  }
+
+  .macro-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .sleep-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:700px){
+
+  .app{
+    width:calc(100% - 20px);
+    padding:10px 0 45px;
+  }
+
+  .hero{
+    padding:26px 20px;
+    border-radius:22px;
+  }
+
+  h1{
+    font-size:clamp(2.4rem,12vw,3.9rem);
+  }
+
+  .section-card{
+    padding:19px;
+    border-radius:19px;
+  }
+
+  .section-header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .schedule-top{
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .timeline::before{
+    left:8px;
+  }
+
+  .timeline-row{
+    grid-template-columns:1fr;
+    gap:5px;
+    padding-left:27px;
+  }
+
+  .timeline-row::before{
+    top:14px;
+    left:3px;
+  }
+
+  .time{
+    padding-top:0;
+    text-align:left;
+    font-size:.72rem;
+  }
+
+  .activity-card{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:7px;
+  }
+
+  .checklist-grid{
+    grid-template-columns:1fr;
+  }
+
+  .tabs{
+    top:5px;
+  }
+
+  .tracker-header{
+    align-items:flex-start;
+  }
+
+  .progress-area{
+    width:100%;
+    max-width:none;
+  }
+
+  .shopping-summary{
+    flex-direction:column;
+  }
+}
+
+@media(max-width:480px){
+
+  .hero-stats{
+    grid-template-columns:1fr;
+  }
+
+  .stat-card{
+    min-height:auto;
+  }
+
+  .tab-btn{
+    padding:9px 11px;
+  }
+
+  .macro-grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+</style>
+</head>
+
+
+<body>
+
+<main class="app">
+
+<!-- ======================================================
+     HERO
+====================================================== -->
+
+<header class="hero">
+
+  <p class="eyebrow">
+    MELLO — Performance System
+  </p>
+
+  <h1
+    contenteditable="true"
+    data-edit="heroTitle"
+  >
+    31-Day<br>
+    Performance Routine
+  </h1>
+
+  <p
+    class="hero-description"
+    contenteditable="true"
+    data-edit="heroDescription"
+  >
+    Fitness × University × Creative Work × Basketball.
+    A clean daily system designed for training,
+    productivity, recovery, nutrition and consistency.
+  </p>
+
+  <div class="hero-stats">
+
+    <div class="stat-card">
+      <span class="stat-label">Sleep</span>
+
+      <div
+        class="stat-value"
+        contenteditable="true"
+        data-edit="heroSleep"
+      >
+        11:30 PM – 7:30 AM
+      </div>
+    </div>
+
+
+    <div class="stat-card">
+      <span class="stat-label">Fitness Goal</span>
+
+      <div
+        class="stat-value"
+        contenteditable="true"
+        data-edit="heroFitness"
+      >
+        Lean Bulk + Strength
+      </div>
+    </div>
+
+
+    <div class="stat-card">
+      <span class="stat-label">Athletic Goal</span>
+
+      <div
+        class="stat-value"
+        contenteditable="true"
+        data-edit="heroAthletic"
+      >
+        Speed + Jump + Basketball
+      </div>
+    </div>
+
+
+    <div class="stat-card">
+      <span class="stat-label">Nutrition</span>
+
+      <div
+        class="stat-value"
+        contenteditable="true"
+        data-edit="heroNutrition"
+      >
+        ~2,700 kcal / day
+      </div>
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- ======================================================
+     NAVIGATION
+====================================================== -->
+
+<nav class="tabs">
+
+  <button class="tab-btn active" data-tab="overview">
+    Weekly Overview
+  </button>
+
+  <button class="tab-btn" data-tab="daily">
+    Daily Schedules
+  </button>
+
+  <button class="tab-btn" data-tab="food">
+    Food Plan
+  </button>
+
+  <button class="tab-btn" data-tab="shopping">
+    Shopping List
+  </button>
+
+  <button class="tab-btn" data-tab="tracker">
+    31-Day Tracker
+  </button>
+
+  <button class="tab-btn" data-tab="recovery">
+    Recovery Checklist
+  </button>
+
+</nav>
+
+
+<!-- ======================================================
+     WEEKLY OVERVIEW
+====================================================== -->
+
+<section class="panel active" id="overview">
+
+  <article class="section-card">
+
+    <div class="section-header">
+
+      <div>
+        <p class="eyebrow">Weekly System</p>
+
+        <h2 contenteditable="true" data-edit="weeklyTitle">
+          Training Overview
+        </h2>
+
+        <p contenteditable="true" data-edit="weeklyDescription">
+          Monday to Sunday training structure.
+        </p>
+      </div>
+
+      <span class="save-status">
+        Auto-save enabled
+      </span>
+
+    </div>
+
+
+    <div class="weekly-grid">
+
+      <article class="week-card">
+
+        <div class="week-day">MONDAY</div>
+
+        <div
+          class="week-focus"
+          contenteditable="true"
+          data-edit="weekMonFocus"
+        >
+          Legs + Jump
+        </div>
+
+        <div
+          class="week-note"
+          contenteditable="true"
+          data-edit="weekMonNote"
+        >
+          Business Statistics
+        </div>
+
+      </article>
+
+
+      <article class="week-card">
+
+        <div class="week-day">TUESDAY</div>
+
+        <div
+          class="week-focus"
+          contenteditable="true"
+          data-edit="weekTueFocus"
+        >
+          Chest + Triceps
+        </div>
+
+        <div
+          class="week-note"
+          contenteditable="true"
+          data-edit="weekTueNote"
+        >
+          Business English + Taxation
+        </div>
+
+      </article>
+
+
+      <article class="week-card">
+
+        <div class="week-day">WEDNESDAY</div>
+
+        <div
+          class="week-focus"
+          contenteditable="true"
+          data-edit="weekWedFocus"
+        >
+          Back + Biceps
+        </div>
+
+        <div
+          class="week-note"
+          contenteditable="true"
+          data-edit="weekWedNote"
+        >
+          Work + Study + Basketball
+        </div>
+
+      </article>
+
+
+      <article class="week-card">
+
+        <div class="week-day">THURSDAY</div>
+
+        <div
+          class="week-focus"
+          contenteditable="true"
+          data-edit="weekThuFocus"
+        >
+          Shoulders + Neck + Core
+        </div>
+
+        <div
+          class="week-note"
+          contenteditable="true"
+          data-edit="weekThuNote"
+        >
+          Macroeconomics + Digital Innovative Thinking
+        </div>
+
+      </article>
+
+
+      <article class="week-card">
+
+        <div class="week-day">FRIDAY</div>
+
+        <div
+          class="week-focus"
+          contenteditable="true"
+          data-edit="weekFriFocus"
+        >
+          Stamina + Basketball
+        </div>
+
+        <div
+          class="week-note"
+          contenteditable="true"
+          data-edit="weekFriNote"
+        >
+          Athletic conditioning
+        </div>
+
+      </article>
+
+
+      <article class="week-card">
+
+        <div class="week-day">SATURDAY</div>
+
+        <div
+          class="week-focus"
+          contenteditable="true"
+          data-edit="weekSatFocus"
+        >
+          Athletic Full Body
+        </div>
+
+        <div
+          class="week-note"
+          contenteditable="true"
+          data-edit="weekSatNote"
+        >
+          Speed + Jump + Basketball
+        </div>
+
+      </article>
+
+
+      <article class="week-card">
+
+        <div class="week-day">SUNDAY</div>
+
+        <div
+          class="week-focus"
+          contenteditable="true"
+          data-edit="weekSunFocus"
+        >
+          Recovery / Rest Day
+        </div>
+
+        <div
+          class="week-note"
+          contenteditable="true"
+          data-edit="weekSunNote"
+        >
+          Mobility + Weekly Planning
+        </div>
+
+      </article>
+
+    </div>
+
+
+    <div class="legend">
+
+      <span class="legend-item">
+        <span class="legend-dot"></span>
+        University
+      </span>
+
+      <span class="legend-item">
+        <span class="legend-dot"></span>
+        Work
+      </span>
+
+      <span class="legend-item">
+        <span class="legend-dot"></span>
+        Training
+      </span>
+
+      <span class="legend-item">
+        <span class="legend-dot"></span>
+        Basketball
+      </span>
+
+      <span class="legend-item">
+        <span class="legend-dot"></span>
+        Recovery
+      </span>
+
+      <span class="legend-item">
+        <span class="legend-dot"></span>
+        Sleep
+      </span>
+
+    </div>
+
+  </article>
+
+
+  <!-- UNIVERSITY -->
+
+  <article class="section-card">
+
+    <div class="section-header">
+
+      <div>
+        <p class="eyebrow">University</p>
+
+        <h2 contenteditable="true" data-edit="universityTitle">
+          Class Schedule
+        </h2>
+
+        <p>
+          Click any editable text to change it.
+        </p>
+      </div>
+
+    </div>
+
+
+    <div class="table-scroll">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Time</th>
+            <th>Class</th>
+            <th>Room</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>Monday</td>
+
+            <td contenteditable="true" data-edit="uniMonTime">
+              8:30 AM – 11:20 AM
+            </td>
+
+            <td contenteditable="true" data-edit="uniMonClass">
+              Business Statistics
+            </td>
+
+            <td contenteditable="true" data-edit="uniMonRoom">
+              Building 21, Room 21304
+            </td>
+          </tr>
+
+
+          <tr>
+            <td>Tuesday</td>
+
+            <td contenteditable="true" data-edit="uniTueTime1">
+              11:30 AM – 2:20 PM
+            </td>
+
+            <td contenteditable="true" data-edit="uniTueClass1">
+              Business English for International Communication 2
+            </td>
+
+            <td contenteditable="true" data-edit="uniTueRoom1">
+              Building 21, Room 21207
+            </td>
+          </tr>
+
+
+          <tr>
+            <td>Tuesday</td>
+
+            <td contenteditable="true" data-edit="uniTueTime2">
+              5:30 PM – 8:20 PM
+            </td>
+
+            <td contenteditable="true" data-edit="uniTueClass2">
+              Taxation
+            </td>
+
+            <td contenteditable="true" data-edit="uniTueRoom2">
+              Building 21, Room 21203
+            </td>
+          </tr>
+
+
+          <tr>
+            <td>Thursday</td>
+
+            <td contenteditable="true" data-edit="uniThuTime1">
+              11:30 AM – 2:20 PM
+            </td>
+
+            <td contenteditable="true" data-edit="uniThuClass1">
+              Macroeconomics
+            </td>
+
+            <td contenteditable="true" data-edit="uniThuRoom1">
+              Building 21, Room 21203
+            </td>
+          </tr>
+
+
+          <tr>
+            <td>Thursday</td>
+
+            <td contenteditable="true" data-edit="uniThuTime2">
+              2:30 PM – 5:20 PM
+            </td>
+
+            <td contenteditable="true" data-edit="uniThuClass2">
+              Digital Innovative Thinking for Business
+            </td>
+
+            <td contenteditable="true" data-edit="uniThuRoom2">
+              Building 21, Room 21303
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </article>
+
+
+  <!-- PRIORITY -->
+
+  <article class="section-card">
+
+    <div class="section-header">
+
+      <div>
+        <p class="eyebrow">System</p>
+
+        <h2>
+          Weekly Priority System
+        </h2>
+      </div>
+
+    </div>
+
+
+    <div class="priority-grid">
+
+      <div class="priority-card">
+        <div class="priority-number">01</div>
+        <div class="priority-name">SLEEP</div>
+      </div>
+
+      <div class="priority-card">
+        <div class="priority-number">02</div>
+        <div class="priority-name">UNIVERSITY</div>
+      </div>
+
+      <div class="priority-card">
+        <div class="priority-number">03</div>
+        <div class="priority-name">WORK</div>
+      </div>
+
+      <div class="priority-card">
+        <div class="priority-number">04</div>
+        <div class="priority-name">TRAINING</div>
+      </div>
+
+      <div class="priority-card">
+        <div class="priority-number">05</div>
+        <div class="priority-name">BASKETBALL</div>
+      </div>
+
+      <div class="priority-card">
+        <div class="priority-number">06</div>
+        <div class="priority-name">RECOVERY</div>
+      </div>
+
+      <div class="priority-card">
+        <div class="priority-number">07</div>
+        <div class="priority-name">PERSONAL TIME</div>
+      </div>
+
+    </div>
+
+  </article>
+
+</section>
+
+
+<!-- ======================================================
+     DAILY SCHEDULES
+====================================================== -->
+
+<section class="panel" id="daily">
+
+  <article class="section-card">
+
+    <div class="section-header">
+
+      <div>
+        <p class="eyebrow">Daily Timeline</p>
+
+        <h2>
+          Daily Schedules
+        </h2>
+
+        <p>
+          Click inside activity or time text to manually edit.
+        </p>
+      </div>
+
+      <span class="save-status">
+        Changes save automatically
+      </span>
+
+    </div>
+
+
+    <div class="day-switcher" id="daySwitcher"></div>
+
+    <div id="scheduleView"></div>
+
+  </article>
+
+</section>
+
+
+<!-- ======================================================
+     FOOD PLAN
+====================================================== -->
+
+<section class="panel" id="food">
+
+  <article class="section-card">
+
+    <div class="section-header">
+
+      <div>
+        <p class="eyebrow">MELLO Nutrition</p>
+
+        <h2>
+          7-Day Natural Lean Bulk Plan
+        </h2>
+
+        <p>
+          Simple, natural, easy-to-cook meals designed around
+          training, university and basketball.
+        </p>
+      </div>
+
+      <span class="save-status">
+        Click text to edit
+      </span>
+
+    </div>
+
+
+    <div class="food-intro">
+
+      <div class="macro-main">
+
+        <h3>
+          Daily Macro Split
+        </h3>
+
+        <p>
+          Target intake. Adjust portions based on actual body-weight
+          trend, training load and appetite.
+        </p>
+
+        <div class="macro-grid">
+
+          <div class="macro-card">
+            <small>Calories</small>
+            <strong contenteditable="true" data-edit="macroCalories">
+              ~2,700 kcal
+            </strong>
+          </div>
+
+          <div class="macro-card">
+            <small>Protein</small>
+            <strong contenteditable="true" data-edit="macroProtein">
+              140 g
+            </strong>
+          </div>
+
+          <div class="macro-card">
+            <small>Carbs</small>
+            <strong contenteditable="true" data-edit="macroCarbs">
+              350–370 g
+            </strong>
+          </div>
+
+          <div class="macro-card">
+            <small>Fat</small>
+            <strong contenteditable="true" data-edit="macroFat">
+              70–80 g
+            </strong>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="macro-main">
+
+        <h3>Hydration</h3>
+
+        <p>
+          Daily water target
+        </p>
+
+        <div style="margin-top:18px">
+
+          <div class="macro-card">
+
+            <small>Water</small>
+
+            <strong
+              contenteditable="true"
+              data-edit="macroWater"
+            >
+              2.5–3 L
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="table-scroll">
+
+      <table class="food-table">
+
+        <thead>
+
+          <tr>
+
+            <th>Day</th>
+            <th>Breakfast</th>
+            <th>Morning Snack</th>
+            <th>Lunch</th>
+            <th>Pre-Workout</th>
+            <th>Training</th>
+            <th>Dinner</th>
+            <th>Before Bed</th>
+            <th>Macro</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+          <!-- MONDAY -->
+
+          <tr>
+
+            <td class="meal-name">
+              Monday
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodMonBreakfast"
+            >
+              Oats + banana + 2 eggs + milk
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodMonSnack"
+            >
+              Greek yogurt + banana
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodMonLunch"
+            >
+              Rice + chicken breast + vegetables
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodMonPre"
+            >
+              Banana + oats + coffee
+            </td>
+
+            <td class="food-cell">
+              Legs + Jump
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodMonDinner"
+            >
+              Rice + fish + vegetables + egg
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodMonBed"
+            >
+              Milk + oats
+            </td>
+
+            <td
+              class="food-macro"
+              contenteditable="true"
+              data-edit="foodMonMacro"
+            >
+              ~2,700 kcal / P 140g
+            </td>
+
+          </tr>
+
+
+          <!-- TUESDAY -->
+
+          <tr>
+
+            <td class="meal-name">
+              Tuesday
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodTueBreakfast"
+            >
+              3 eggs + toast + banana + milk
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodTueSnack"
+            >
+              Yogurt + oats + fruit
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodTueLunch"
+            >
+              Rice + chicken + mixed vegetables
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodTuePre"
+            >
+              Banana + toast + coffee
+            </td>
+
+            <td class="food-cell">
+              Chest + Triceps
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodTueDinner"
+            >
+              Rice + lean beef + vegetables
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodTueBed"
+            >
+              Milk + banana
+            </td>
+
+            <td
+              class="food-macro"
+              contenteditable="true"
+              data-edit="foodTueMacro"
+            >
+              ~2,700 kcal / P 140g
+            </td>
+
+          </tr>
+
+
+          <!-- WEDNESDAY -->
+
+          <tr>
+
+            <td class="meal-name">
+              Wednesday
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodWedBreakfast"
+            >
+              Oats + peanut butter + banana + 2 eggs
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodWedSnack"
+            >
+              Milk + banana + nuts
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodWedLunch"
+            >
+              Rice + chicken + broccoli + egg
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodWedPre"
+            >
+              Banana + oats + coffee
+            </td>
+
+            <td class="food-cell">
+              Back + Biceps
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodWedDinner"
+            >
+              Rice + fish + vegetables
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodWedBed"
+            >
+              Yogurt + oats
+            </td>
+
+            <td
+              class="food-macro"
+              contenteditable="true"
+              data-edit="foodWedMacro"
+            >
+              ~2,700 kcal / P 140g
+            </td>
+
+          </tr>
+
+
+          <!-- THURSDAY -->
+
+          <tr>
+
+            <td class="meal-name">
+              Thursday
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodThuBreakfast"
+            >
+              Eggs + toast + oats + banana
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodThuSnack"
+            >
+              Greek yogurt + fruit
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodThuLunch"
+            >
+              Rice + chicken + vegetables
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodThuPre"
+            >
+              Banana + toast + coffee
+            </td>
+
+            <td class="food-cell">
+              Shoulders + Neck + Core
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodThuDinner"
+            >
+              Rice + beef + vegetables + egg
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodThuBed"
+            >
+              Milk + oats
+            </td>
+
+            <td
+              class="food-macro"
+              contenteditable="true"
+              data-edit="foodThuMacro"
+            >
+              ~2,700 kcal / P 140g
+            </td>
+
+          </tr>
+
+
+          <!-- FRIDAY -->
+
+          <tr>
+
+            <td class="meal-name">
+              Friday
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodFriBreakfast"
+            >
+              Oats + banana + eggs + milk
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodFriSnack"
+            >
+              Yogurt + banana + nuts
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodFriLunch"
+            >
+              Rice + chicken + vegetables
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodFriPre"
+            >
+              Banana + oats + coffee
+            </td>
+
+            <td class="food-cell">
+              Stamina + Basketball
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodFriDinner"
+            >
+              Rice + fish + vegetables + egg
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodFriBed"
+            >
+              Milk + banana
+            </td>
+
+            <td
+              class="food-macro"
+              contenteditable="true"
+              data-edit="foodFriMacro"
+            >
+              ~2,700 kcal / P 140g
+            </td>
+
+          </tr>
+
+
+          <!-- SATURDAY -->
+
+          <tr>
+
+            <td class="meal-name">
+              Saturday
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodSatBreakfast"
+            >
+              Oats + eggs + banana + milk
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodSatSnack"
+            >
+              Yogurt + oats + fruit
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodSatLunch"
+            >
+              Rice + chicken + vegetables + egg
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodSatPre"
+            >
+              Banana + toast + coffee
+            </td>
+
+            <td class="food-cell">
+              Athletic Full Body + Speed + Jump
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodSatDinner"
+            >
+              Rice + lean beef + vegetables
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodSatBed"
+            >
+              Milk + oats + peanut butter
+            </td>
+
+            <td
+              class="food-macro"
+              contenteditable="true"
+              data-edit="foodSatMacro"
+            >
+              ~2,700 kcal / P 140g
+            </td>
+
+          </tr>
+
+
+          <!-- SUNDAY -->
+
+          <tr>
+
+            <td class="meal-name">
+              Sunday
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodSunBreakfast"
+            >
+              Eggs + toast + oats + fruit
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodSunSnack"
+            >
+              Yogurt + banana
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodSunLunch"
+            >
+              Rice + fish/chicken + vegetables
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodSunPre"
+            >
+              Fruit + oats if hungry
+            </td>
+
+            <td class="food-cell">
+              Recovery / Rest
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodSunDinner"
+            >
+              Rice + chicken + vegetables + egg
+            </td>
+
+            <td
+              class="food-cell"
+              contenteditable="true"
+              data-edit="foodSunBed"
+            >
+              Milk + oats
+            </td>
+
+            <td
+              class="food-macro"
+              contenteditable="true"
+              data-edit="foodSunMacro"
+            >
+              ~2,600–2,700 kcal / P 140g
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <div class="edit-hint">
+      Tip: Click any highlighted/editable food text to customize
+      portions or replace meals. Changes are saved automatically.
+    </div>
+
+  </article>
+
+
+  <!-- MACRO DETAILS -->
+
+  <article class="section-card">
+
+    <div class="section-header">
+
+      <div>
+        <p class="eyebrow">Daily Target</p>
+
+        <h2>
+          Macro & Hydration Guide
+        </h2>
+      </div>
+
+    </div>
+
+
+    <div class="table-scroll">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Target</th>
+            <th>Daily Amount</th>
+            <th>Purpose</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>Calories</td>
+
+            <td
+              contenteditable="true"
+              data-edit="macroTableCalories"
+            >
+              ~2,700 kcal
+            </td>
+
+            <td>
+              Lean-bulk energy target
+            </td>
+          </tr>
+
+          <tr>
+            <td>Protein</td>
+
+            <td
+              contenteditable="true"
+              data-edit="macroTableProtein"
+            >
+              140 g
+            </td>
+
+            <td>
+              Muscle recovery and growth
+            </td>
+          </tr>
+
+          <tr>
+            <td>Carbohydrates</td>
+
+            <td
+              contenteditable="true"
+              data-edit="macroTableCarbs"
+            >
+              350–370 g
+            </td>
+
+            <td>
+              Training and basketball fuel
+            </td>
+          </tr>
+
+          <tr>
+            <td>Fat</td>
+
+            <td
+              contenteditable="true"
+              data-edit="macroTableFat"
+            >
+              70–80 g
+            </td>
+
+            <td>
+              Energy and healthy-fat intake
+            </td>
+          </tr>
+
+          <tr>
+            <td>Water</td>
+
+            <td
+              contenteditable="true"
+              data-edit="macroTableWater"
+            >
+              2.5–3 L
+            </td>
+
+            <td>
+              Hydration and performance
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </article>
+
+</section>
+
+
+<!-- ======================================================
+     SHOPPING LIST
+====================================================== -->
+
+<section class="panel" id="shopping">
+
+  <article class="section-card">
+
+    <div class="section-header">
+
+      <div>
+        <p class="eyebrow">Weekly Grocery System</p>
+
+        <h2>
+          Shopping List
+        </h2>
+
+        <p>
+          Tick items as you buy them. Shopping data is saved locally.
+        </p>
+      </div>
+
+      <button
+        class="secondary-btn"
+        id="resetShopping"
+      >
+        Reset Shopping
+      </button>
+
+    </div>
+
+
+    <div class="shopping-grid" id="shoppingGrid"></div>
+
+
+    <div class="shopping-summary">
+
+      <strong id="shoppingProgress">
+        0 items checked
+      </strong>
+
+      <span>
+        Protein • Carbs • Vegetables • Fruits • Healthy Fats • Oatside & Coffee
+      </span>
+
+    </div>
+
+  </article>
+
+
+  <article class="section-card">
+
+    <div class="section-header">
+
+      <div>
+        <p class="eyebrow">Simple Rule</p>
+
+        <h2>
+          Natural Lean Bulk Grocery System
+        </h2>
+      </div>
+
+    </div>
+
+
+    <div class="table-scroll">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Category</th>
+            <th>Weekly Focus</th>
+            <th>Easy Preparation</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>Protein</td>
+            <td contenteditable="true" data-edit="shopProteinFocus">
+              Chicken, eggs, fish, lean beef, Greek yogurt, milk
+            </td>
+            <td contenteditable="true" data-edit="shopProteinPrep">
+              Pan-fry, boil, air-fry or meal-prep
+            </td>
+          </tr>
+
+          <tr>
+            <td>Carbs</td>
+            <td contenteditable="true" data-edit="shopCarbFocus">
+              Rice, oats, bread, bananas, potatoes
+            </td>
+            <td contenteditable="true" data-edit="shopCarbPrep">
+              Cook rice in batches and keep oats ready
+            </td>
+          </tr>
+
+          <tr>
+            <td>Vegetables</td>
+            <td contenteditable="true" data-edit="shopVegFocus">
+              Broccoli, carrots, spinach, mixed vegetables
+            </td>
+            <td contenteditable="true" data-edit="shopVegPrep">
+              Steam, stir-fry or use frozen vegetables
+            </td>
+          </tr>
+
+          <tr>
+            <td>Fruits</td>
+            <td contenteditable="true" data-edit="shopFruitFocus">
+              Bananas, apples, oranges
+            </td>
+            <td contenteditable="true" data-edit="shopFruitPrep">
+              Ready-to-eat snacks
+            </td>
+          </tr>
+
+          <tr>
+            <td>Healthy Fats</td>
+            <td contenteditable="true" data-edit="shopFatFocus">
+              Peanut butter, nuts, avocado
+            </td>
+            <td contenteditable="true" data-edit="shopFatPrep">
+              Add to oats, toast or meals
+            </td>
+          </tr>
+
+          <tr>
+            <td>Oatside & Coffee</td>
+            <td contenteditable="true" data-edit="shopDrinkFocus">
+              Oatside, coffee, water
+            </td>
+            <td contenteditable="true" data-edit="shopDrinkPrep">
+              Breakfast / pre-workout drink
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </article>
+
+</section>
+
+
+<!-- ======================================================
+     31 DAY TRACKER
+====================================================== -->
+
+<section class="panel" id="tracker">
+
+  <article class="section-card">
+
+    <div class="tracker-header">
+
+      <div class="tracker-title">
+
+        <p class="eyebrow">Consistency System</p>
+
+        <h2>
+          31-Day Tracker
+        </h2>
+
+        <p>
+          Training • Study • Work • Recovery • Sleep • Done
+        </p>
+
+      </div>
+
+
+      <div class="progress-area">
+
+        <div class="progress-info">
+
+          <span>
+            Overall completion
+          </span>
+
+          <span id="progressText">
+            0%
+          </span>
+
+        </div>
+
+
+        <div class="progress-track">
+
+          <div
+            class="progress-fill"
+            id="progressFill"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="secondary-btn danger-btn"
+        id="resetTracker"
+      >
+        Reset Tracker
+      </button>
+
+    </div>
+
+
+    <div class="table-scroll">
+
+      <table class="tracker">
+
+        <thead>
+
+          <tr>
+
+            <th>Day</th>
+            <th>Training</th>
+            <th>Study</th>
+            <th>Work</th>
+            <th>Recovery</th>
+            <th>Sleep</th>
+            <th>Done</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="trackerBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </article>
+
+</section>
+
+
+<!-- ======================================================
+     RECOVERY
+====================================================== -->
+
+<section class="panel" id="recovery">
+
+  <article class="section-card">
+
+    <div class="section-header">
+
+      <div>
+
+        <p class="eyebrow">
+          Recovery System
+        </p>
+
+        <h2>
+          Daily Recovery Checklist
+        </h2>
+
+        <p>
+          Complete these small actions every day.
+        </p>
+
+      </div>
+
+
+      <button
+        class="secondary-btn danger-btn"
+        id="resetRecovery"
+      >
+        Reset Checklist
+      </button>
+
+    </div>
+
+
+    <div class="sleep-grid">
+
+      <div class="sleep-card">
+
+        <span>Sleep Window</span>
+
+        <strong
+          contenteditable="true"
+          data-edit="recoverySleepWindow"
+        >
+          11:30 PM → 7:30 AM
+        </strong>
+
+      </div>
+
+
+      <div class="sleep-card">
+
+        <span>Sleep Target</span>
+
+        <strong
+          contenteditable="true"
+          data-edit="recoverySleepTarget"
+        >
+          8 Hours
+        </strong>
+
+      </div>
+
+
+      <div class="sleep-card">
+
+        <span>Water Target</span>
+
+        <strong
+          contenteditable="true"
+          data-edit="recoveryWaterTarget"
+        >
+          2.5–3 L
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="checklist-grid"
+      id="recoveryList"
+    ></div>
+
+  </article>
+
+</section>
+
+
+<footer class="footer">
+
+  <div>
+    MELLO • 31-Day Performance Planner
+  </div>
+
+  <div class="quote">
+    “Consistency over intensity.”
+  </div>
+
+</footer>
+
+</main>
+
+
+<script>
+
+/* =========================================================
+   MELLO PERFORMANCE PLANNER
+   LocalStorage + Editable Content + Tracker
+========================================================= */
+
+const STORAGE = {
+
+  tracker:
+    "mello_31_day_tracker_v1",
+
+  recovery:
+    "mello_recovery_v1",
+
+  shopping:
+    "mello_shopping_v1",
+
+  edits:
+    "mello_manual_edits_v1"
+
+};
+
+
+/* =========================================================
+   HELPER FUNCTIONS
+========================================================= */
+
+function getStorage(key, fallback = {}){
+
+  try{
+
+    const value =
+      localStorage.getItem(key);
+
+    return value
+      ? JSON.parse(value)
+      : fallback;
+
+  }catch(error){
+
+    console.warn(
+      "Storage read error:",
+      error
+    );
+
+    return fallback;
+
+  }
+
+}
+
+
+function setStorage(key,value){
+
+  try{
+
+    localStorage.setItem(
+      key,
+      JSON.stringify(value)
+    );
+
+  }catch(error){
+
+    console.warn(
+      "Storage write error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+function initializeTabs(){
+
+  const buttons =
+    document.querySelectorAll(
+      ".tab-btn"
+    );
+
+  const panels =
+    document.querySelectorAll(
+      ".panel"
+    );
+
+
+  buttons.forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        buttons.forEach(btn =>
+          btn.classList.remove(
+            "active"
+          )
+        );
+
+        panels.forEach(panel =>
+          panel.classList.remove(
+            "active"
+          )
+        );
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        const target =
+          document.getElementById(
+            button.dataset.tab
+          );
+
+
+        if(target){
+
+          target.classList.add(
+            "active"
+          );
+
+        }
+
+        window.scrollTo({
+          top:0,
+          behavior:"smooth"
+        });
+
+      }
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   MANUAL EDITING
+========================================================= */
+
+function initializeManualEditing(){
+
+  const editable =
+    document.querySelectorAll(
+      "[contenteditable='true'][data-edit]"
+    );
+
+
+  const saved =
+    getStorage(
+      STORAGE.edits,
+      {}
+    );
+
+
+  editable.forEach(element => {
+
+    const key =
+      element.dataset.edit;
+
+
+    if(
+      Object.prototype.hasOwnProperty.call(
+        saved,
+        key
+      )
+    ){
+
+      element.innerHTML =
+        saved[key];
+
+    }
+
+
+    element.addEventListener(
+      "input",
+      () => {
+
+        const current =
+          getStorage(
+            STORAGE.edits,
+            {}
+          );
+
+
+        current[key] =
+          element.innerHTML;
+
+
+        setStorage(
+          STORAGE.edits,
+          current
+        );
+
+      }
+    );
+
+
+    element.addEventListener(
+      "keydown",
+      event => {
+
+        /*
+          Prevent accidental Enter-created
+          multi-line layout in most editable cells.
+        */
+
+        if(
+          event.key === "Enter" &&
+          element.tagName !== "DIV"
+        ){
+
+          event.preventDefault();
+
+          element.blur();
+
+        }
+
+      }
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   DAILY SCHEDULE DATA
+========================================================= */
+
+const schedules = {
+
+Monday:{
+
+  focus:"Legs + Jump",
+
+  rows:[
+
+    ["6:30 AM","Wake Up","Personal"],
+
+    ["6:40 – 7:00 AM",
+     "Water + Morning Movement",
+     "Recovery"],
+
+    ["7:00 – 7:25 AM",
+     "Breakfast",
+     "Meal Time"],
+
+    ["7:30 AM",
+     "Leave for University",
+     "University"],
+
+    ["8:30 – 11:20 AM",
+     "Business Statistics",
+     "University"],
+
+    ["11:45 AM – 12:15 PM",
+     "Lunch",
+     "Meal Time"],
+
+    ["12:30 – 2:30 PM",
+     "Video Editing / Work",
+     "Work"],
+
+    ["2:30 – 3:30 PM",
+     "Study / Personal Time",
+     "Study"],
+
+    ["3:30 – 4:00 PM",
+     "Pre-Workout Meal",
+     "Meal Time"],
+
+    ["4:00 – 5:30 PM",
+     "Legs + Jump Training",
+     "Training"],
+
+    ["5:30 – 6:00 PM",
+     "Cool Down + Shower",
+     "Recovery"],
+
+    ["6:00 – 7:00 PM",
+     "Dinner",
+     "Meal Time"],
+
+    ["7:00 – 9:00 PM",
+     "Creative Work / Editing",
+     "Work"],
+
+    ["9:00 – 10:00 PM",
+     "University Review",
+     "Study"],
+
+    ["10:00 – 11:00 PM",
+     "Stretching + Prepare Tomorrow",
+     "Recovery"],
+
+    ["11:00 – 11:30 PM",
+     "Wind Down",
+     "Recovery"],
+
+    ["11:30 PM",
+     "SLEEP",
+     "Sleep"]
+
+  ]
+
+},
+
+
+Tuesday:{
+
+  focus:"Chest + Triceps",
+
+  rows:[
+
+    ["7:30 AM","Wake Up","Personal"],
+
+    ["7:45 – 8:15 AM",
+     "Breakfast",
+     "Meal Time"],
+
+    ["8:30 – 10:30 AM",
+     "Video Editing / Work",
+     "Work"],
+
+    ["10:30 – 11:15 AM",
+     "Travel + University Preparation",
+     "University"],
+
+    ["11:30 AM – 2:20 PM",
+     "Business English for International Communication 2",
+     "University"],
+
+    ["2:30 – 3:00 PM",
+     "Lunch",
+     "Meal Time"],
+
+    ["3:15 – 4:45 PM",
+     "Chest + Triceps Training",
+     "Training"],
+
+    ["4:45 – 5:15 PM",
+     "Cool Down + Shower",
+     "Recovery"],
+
+    ["5:30 – 8:20 PM",
+     "Taxation",
+     "University"],
+
+    ["8:45 – 9:15 PM",
+     "Dinner",
+     "Meal Time"],
+
+    ["9:15 – 10:00 PM",
+     "University Review",
+     "Study"],
+
+    ["10:00 – 11:00 PM",
+     "Personal Time",
+     "Recovery"],
+
+    ["11:00 – 11:30 PM",
+     "Wind Down",
+     "Recovery"],
+
+    ["11:30 PM",
+     "SLEEP",
+     "Sleep"]
+
+  ]
+
+},
+
+
+Wednesday:{
+
+  focus:"Back + Biceps",
+
+  rows:[
+
+    ["7:30 AM","Wake Up","Personal"],
+
+    ["7:45 – 8:15 AM",
+     "Breakfast",
+     "Meal Time"],
+
+    ["8:30 – 10:30 AM",
+     "Video Editing / Work",
+     "Work"],
+
+    ["10:30 – 11:00 AM",
+     "Break",
+     "Recovery"],
+
+    ["11:00 AM – 12:00 PM",
+     "Study",
+     "Study"],
+
+    ["12:00 – 12:30 PM",
+     "Lunch",
+     "Meal Time"],
+
+    ["12:30 – 3:00 PM",
+     "Creative Work",
+     "Work"],
+
+    ["3:00 – 3:30 PM",
+     "Pre-Workout Meal",
+     "Meal Time"],
+
+    ["4:00 – 5:30 PM",
+     "Back + Biceps Training",
+     "Training"],
+
+    ["5:30 – 6:00 PM",
+     "Cool Down + Shower",
+     "Recovery"],
+
+    ["6:00 – 7:00 PM",
+     "Basketball Skills / Shooting",
+     "Basketball"],
+
+    ["7:00 – 7:30 PM",
+     "Dinner",
+     "Meal Time"],
+
+    ["7:30 – 9:00 PM",
+     "Creative Work",
+     "Work"],
+
+    ["9:00 – 10:30 PM",
+     "Study",
+     "Study"],
+
+    ["10:30 – 11:30 PM",
+     "Wind Down",
+     "Recovery"],
+
+    ["11:30 PM",
+     "SLEEP",
+     "Sleep"]
+
+  ]
+
+},
+
+
+Thursday:{
+
+  focus:"Shoulders + Neck + Core",
+
+  rows:[
+
+    ["7:30 AM","Wake Up","Personal"],
+
+    ["7:45 – 8:15 AM",
+     "Breakfast",
+     "Meal Time"],
+
+    ["8:30 – 10:00 AM",
+     "Video Editing / Work",
+     "Work"],
+
+    ["10:00 – 11:00 AM",
+     "Travel + University Preparation",
+     "University"],
+
+    ["11:30 AM – 2:20 PM",
+     "Macroeconomics",
+     "University"],
+
+    ["2:30 – 5:20 PM",
+     "Digital Innovative Thinking for Business",
+     "University"],
+
+    ["5:30 – 6:00 PM",
+     "Pre-Workout Meal",
+     "Meal Time"],
+
+    ["6:00 – 7:30 PM",
+     "Shoulders + Neck + Core",
+     "Training"],
+
+    ["7:30 – 8:00 PM",
+     "Shower + Recovery",
+     "Recovery"],
+
+    ["8:00 – 8:30 PM",
+     "Dinner",
+     "Meal Time"],
+
+    ["8:30 – 9:30 PM",
+     "University Work / Editing",
+     "Study"],
+
+    ["9:30 – 10:30 PM",
+     "Personal Time",
+     "Personal"],
+
+    ["10:30 – 11:30 PM",
+     "Wind Down",
+     "Recovery"],
+
+    ["11:30 PM",
+     "SLEEP",
+     "Sleep"]
+
+  ]
+
+},
+
+
+Friday:{
+
+  focus:"Stamina + Basketball",
+
+  rows:[
+
+    ["7:30 AM","Wake Up","Personal"],
+
+    ["7:45 – 8:15 AM",
+     "Breakfast",
+     "Meal Time"],
+
+    ["8:30 – 10:30 AM",
+     "Video Editing / Work",
+     "Work"],
+
+    ["10:30 – 11:00 AM",
+     "Break",
+     "Recovery"],
+
+    ["11:00 AM – 12:00 PM",
+     "Study",
+     "Study"],
+
+    ["12:00 – 12:30 PM",
+     "Lunch",
+     "Meal Time"],
+
+    ["12:30 – 3:00 PM",
+     "Creative Work",
+     "Work"],
+
+    ["3:00 – 3:30 PM",
+     "Pre-Workout Meal",
+     "Meal Time"],
+
+    ["4:00 – 5:00 PM",
+     "Stamina Training",
+     "Training"],
+
+    ["5:00 – 6:30 PM",
+     "Basketball Training / Game",
+     "Basketball"],
+
+    ["6:30 – 7:00 PM",
+     "Cool Down + Shower",
+     "Recovery"],
+
+    ["7:00 – 7:30 PM",
+     "Dinner",
+     "Meal Time"],
+
+    ["7:30 – 9:00 PM",
+     "Creative Work / Free Time",
+     "Work"],
+
+    ["9:00 – 10:30 PM",
+     "Personal Time",
+     "Personal"],
+
+    ["10:30 – 11:30 PM",
+     "Wind Down",
+     "Recovery"],
+
+    ["11:30 PM",
+     "SLEEP",
+     "Sleep"]
+
+  ]
+
+},
+
+
+Saturday:{
+
+  focus:"Athletic Full Body",
+
+  rows:[
+
+    ["7:30 AM","Wake Up","Personal"],
+
+    ["7:45 – 8:15 AM",
+     "Breakfast",
+     "Meal Time"],
+
+    ["8:30 – 10:30 AM",
+     "Creative Work",
+     "Work"],
+
+    ["10:30 – 11:00 AM",
+     "Break",
+     "Recovery"],
+
+    ["11:00 AM – 12:00 PM",
+     "Study",
+     "Study"],
+
+    ["12:00 – 12:30 PM",
+     "Lunch",
+     "Meal Time"],
+
+    ["12:30 – 3:00 PM",
+     "Video Editing",
+     "Work"],
+
+    ["3:00 – 3:30 PM",
+     "Pre-Workout Meal",
+     "Meal Time"],
+
+    ["4:00 – 5:30 PM",
+     "Athletic Full Body",
+     "Training"],
+
+    ["5:30 – 6:00 PM",
+     "Speed + Jump Training",
+     "Training"],
+
+    ["6:00 – 7:00 PM",
+     "Basketball Skills / Shooting",
+     "Basketball"],
+
+    ["7:00 – 7:30 PM",
+     "Dinner",
+     "Meal Time"],
+
+    ["7:30 – 9:00 PM",
+     "Creative Work / Free Time",
+     "Work"],
+
+    ["9:00 – 10:30 PM",
+     "Personal Time",
+     "Personal"],
+
+    ["10:30 – 11:30 PM",
+     "Wind Down",
+     "Recovery"],
+
+    ["11:30 PM",
+     "SLEEP",
+     "Sleep"]
+
+  ]
+
+},
+
+
+Sunday:{
+
+  focus:"Recovery / Rest Day",
+
+  rows:[
+
+    ["7:30 AM","Wake Up","Personal"],
+
+    ["7:45 – 8:15 AM",
+     "Breakfast",
+     "Meal Time"],
+
+    ["8:30 – 9:30 AM",
+     "Light Walk + Mobility",
+     "Recovery"],
+
+    ["9:30 – 11:00 AM",
+     "Personal Time",
+     "Personal"],
+
+    ["11:00 AM – 12:00 PM",
+     "Weekly Planning",
+     "Study"],
+
+    ["12:00 – 12:30 PM",
+     "Lunch",
+     "Meal Time"],
+
+    ["12:30 – 2:30 PM",
+     "Light Creative Work",
+     "Work"],
+
+    ["2:30 – 4:00 PM",
+     "Rest",
+     "Recovery"],
+
+    ["4:00 – 5:00 PM",
+     "Stretching + Mobility",
+     "Recovery"],
+
+    ["5:00 – 6:30 PM",
+     "Hobby / Personal Time",
+     "Personal"],
+
+    ["6:30 – 7:00 PM",
+     "Dinner",
+     "Meal Time"],
+
+    ["7:00 – 9:00 PM",
+     "Prepare for Next Week",
+     "Study"],
+
+    ["9:00 – 10:30 PM",
+     "Relax",
+     "Personal"],
+
+    ["10:30 – 11:30 PM",
+     "Wind Down",
+     "Recovery"],
+
+    ["11:30 PM",
+     "SLEEP",
+     "Sleep"]
+
+  ]
+
+}
+
+};
+
+
+let selectedDay = "Monday";
+
+
+/* =========================================================
+   DAILY SCHEDULE RENDER
+========================================================= */
+
+function renderDaySwitcher(){
+
+  const root =
+    document.getElementById(
+      "daySwitcher"
+    );
+
+
+  const days =
+    Object.keys(
+      schedules
+    );
+
+
+  root.innerHTML =
+    days.map(day => `
+
+      <button
+        class="day-btn ${
+          selectedDay === day
+          ? "active"
+          : ""
+        }"
+        data-day="${day}"
+      >
+        ${day}
+      </button>
+
+    `).join("");
+
+
+  root
+    .querySelectorAll(
+      ".day-btn"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          selectedDay =
+            button.dataset.day;
+
+          renderDaySwitcher();
+
+          renderDailySchedule();
+
+        }
+      );
+
+    });
+
+}
+
+
+function renderDailySchedule(){
+
+  const schedule =
+    schedules[selectedDay];
+
+
+  const root =
+    document.getElementById(
+      "scheduleView"
+    );
+
+
+  root.innerHTML = `
+
+    <div class="schedule-top">
+
+      <div>
+
+        <h3
+          contenteditable="true"
+          data-dynamic-edit="schedule-${selectedDay}-title"
+        >
+          ${selectedDay}
+        </h3>
+
+        <p
+          class="schedule-focus"
+          contenteditable="true"
+          data-dynamic-edit="schedule-${selectedDay}-focus"
+        >
+          ${schedule.focus}
+        </p>
+
+      </div>
+
+      <span class="schedule-range">
+        ${schedule.rows[0][0]} → 11:30 PM
+      </span>
+
+    </div>
+
+
+    <div class="timeline">
+
+      ${schedule.rows.map(
+        (row,index) => `
+
+          <div class="timeline-row">
+
+            <div
+              class="time"
+              contenteditable="true"
+              data-dynamic-edit="schedule-${selectedDay}-${index}-time"
+            >
+              ${row[0]}
+            </div>
+
+
+            <div class="activity-card">
+
+              <div
+                class="activity-name"
+                contenteditable="true"
+                data-dynamic-edit="schedule-${selectedDay}-${index}-activity"
+              >
+                ${row[1]}
+              </div>
+
+              <span
+                class="category-tag"
+                contenteditable="true"
+                data-dynamic-edit="schedule-${selectedDay}-${index}-category"
+              >
+                ${row[2]}
+              </span>
+
+            </div>
+
+          </div>
+
+        `
+      ).join("")}
+
+    </div>
+
+    <div class="edit-hint">
+      Click any time, activity, category or training title to edit.
+      Changes are saved automatically.
+    </div>
+
+  `;
+
+
+  initializeDynamicEditing();
+
+}
+
+
+/* =========================================================
+   DYNAMIC EDITING
+========================================================= */
+
+function initializeDynamicEditing(){
+
+  const elements =
+    document.querySelectorAll(
+      "[contenteditable='true'][data-dynamic-edit]"
+    );
+
+
+  const saved =
+    getStorage(
+      STORAGE.edits,
+      {}
+    );
+
+
+  elements.forEach(element => {
+
+    const key =
+      element.dataset.dynamicEdit;
+
+
+    if(
+      Object.prototype.hasOwnProperty.call(
+        saved,
+        key
+      )
+    ){
+
+      element.innerHTML =
+        saved[key];
+
+    }
+
+
+    element.addEventListener(
+      "input",
+      () => {
+
+        const current =
+          getStorage(
+            STORAGE.edits,
+            {}
+          );
+
+
+        current[key] =
+          element.innerHTML;
+
+
+        setStorage(
+          STORAGE.edits,
+          current
+        );
+
+      }
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   31 DAY TRACKER
+========================================================= */
+
+const trackerColumns = [
+  "training",
+  "study",
+  "work",
+  "recovery",
+  "sleep",
+  "done"
+];
+
+
+function renderTracker(){
+
+  const state =
+    getStorage(
+      STORAGE.tracker,
+      {}
+    );
+
+
+  const body =
+    document.getElementById(
+      "trackerBody"
+    );
+
+
+  body.innerHTML = "";
+
+
+  for(
+    let day=1;
+    day<=31;
+    day++
+  ){
+
+    const row =
+      document.createElement(
+        "tr"
+      );
+
+
+    const dayCell =
+      document.createElement(
+        "td"
+      );
+
+
+    dayCell.textContent =
+      `Day ${String(day).padStart(2,"0")}`;
+
+
+    row.appendChild(
+      dayCell
+    );
+
+
+    trackerColumns.forEach(
+      column => {
+
+        const cell =
+          document.createElement(
+            "td"
+          );
+
+
+        const checkbox =
+          document.createElement(
+            "input"
+          );
+
+
+        checkbox.type =
+          "checkbox";
+
+
+        const key =
+          `${day}-${column}`;
+
+
+        checkbox.checked =
+          Boolean(
+            state[key]
+          );
+
+
+        checkbox.setAttribute(
+          "aria-label",
+          `Day ${day} ${column}`
+        );
+
+
+        checkbox.addEventListener(
+          "change",
+          () => {
+
+            const current =
+              getStorage(
+                STORAGE.tracker,
+                {}
+              );
+
+
+            current[key] =
+              checkbox.checked;
+
+
+            setStorage(
+              STORAGE.tracker,
+              current
+            );
+
+
+            updateTracker();
+
+          }
+        );
+
+
+        cell.appendChild(
+          checkbox
+        );
+
+
+        row.appendChild(
+          cell
+        );
+
+      }
+    );
+
+
+    body.appendChild(
+      row
+    );
+
+  }
+
+
+  updateTracker();
+
+}
+
+
+function updateTracker(){
+
+  const state =
+    getStorage(
+      STORAGE.tracker,
+      {}
+    );
+
+
+  let completed =
+    0;
+
+
+  const total =
+    31 * trackerColumns.length;
+
+
+  for(
+    let day=1;
+    day<=31;
+    day++
+  ){
+
+    trackerColumns.forEach(
+      column => {
+
+        if(
+          state[
+            `${day}-${column}`
+          ]
+        ){
+
+          completed++;
+
+        }
+
+      }
+    );
+
+  }
+
+
+  const percentage =
+    Math.round(
+      (
+        completed /
+        total
+      ) * 100
+    );
+
+
+  document.getElementById(
+    "progressText"
+  ).textContent =
+    `${percentage}%`;
+
+
+  document.getElementById(
+    "progressFill"
+  ).style.width =
+    `${percentage}%`;
+
+
+  const rows =
+    document.querySelectorAll(
+      "#trackerBody tr"
+    );
+
+
+  rows.forEach(row => {
+
+    const checks =
+      row.querySelectorAll(
+        "input[type='checkbox']"
+      );
+
+
+    const done =
+      checks[checks.length-1];
+
+
+    row.classList.toggle(
+      "completed-row",
+      done.checked
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   RESET TRACKER
+========================================================= */
+
+document.getElementById(
+  "resetTracker"
+).addEventListener(
+  "click",
+  () => {
+
+    if(
+      !confirm(
+        "Reset all 31 days?"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    localStorage.removeItem(
+      STORAGE.tracker
+    );
+
+
+    renderTracker();
+
+  }
+);
+
+
+/* =========================================================
+   RECOVERY CHECKLIST
+========================================================= */
+
+const recoveryItems = [
+
+  "Sleep on time",
+
+  "Morning movement",
+
+  "Training completed",
+
+  "Stretching / mobility",
+
+  "Study completed",
+
+  "Work completed",
+
+  "Prepare for tomorrow"
+
+];
+
+
+function renderRecovery(){
+
+  const state =
+    getStorage(
+      STORAGE.recovery,
+      {}
+    );
+
+
+  const root =
+    document.getElementById(
+      "recoveryList"
+    );
+
+
+  root.innerHTML = "";
+
+
+  recoveryItems.forEach(
+    (item,index) => {
+
+      const label =
+        document.createElement(
+          "label"
+        );
+
+
+      label.className =
+        "check-item";
+
+
+      const checkbox =
+        document.createElement(
+          "input"
+        );
+
+
+      checkbox.type =
+        "checkbox";
+
+
+      checkbox.checked =
+        Boolean(
+          state[index]
+        );
+
+
+      if(
+        checkbox.checked
+      ){
+
+        label.classList.add(
+          "checked"
+        );
+
+      }
+
+
+      checkbox.addEventListener(
+        "change",
+        () => {
+
+          const current =
+            getStorage(
+              STORAGE.recovery,
+              {}
+            );
+
+
+          current[index] =
+            checkbox.checked;
+
+
+          setStorage(
+            STORAGE.recovery,
+            current
+          );
+
+
+          label.classList.toggle(
+            "checked",
+            checkbox.checked
+          );
+
+        }
+      );
+
+
+      const text =
+        document.createElement(
+          "span"
+        );
+
+
+      text.textContent =
+        item;
+
+
+      label.appendChild(
+        checkbox
+      );
+
+
+      label.appendChild(
+        text
+      );
+
+
+      root.appendChild(
+        label
+      );
+
+    }
+  );
+
+}
+
+
+document.getElementById(
+  "resetRecovery"
+).addEventListener(
+  "click",
+  () => {
+
+    if(
+      !confirm(
+        "Reset the recovery checklist?"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    localStorage.removeItem(
+      STORAGE.recovery
+    );
+
+
+    renderRecovery();
+
+  }
+);
+
+
+/* =========================================================
+   SHOPPING LIST
+========================================================= */
+
+const shoppingData = {
+
+  "Protein":[
+    "Chicken breast — 1.5–2 kg",
+    "Eggs — 18–24 eggs",
+    "Fish — 1–1.5 kg",
+    "Lean beef — 500–750 g",
+    "Greek yogurt — 1 kg",
+    "Milk — 2–3 L"
+  ],
+
+  "Carbs":[
+    "Rice — 3–5 kg",
+    "Oats — 1 kg",
+    "Whole-grain bread — 2 loaves",
+    "Bananas — 10–14",
+    "Potatoes — 1–2 kg"
+  ],
+
+  "Vegetables":[
+    "Broccoli — 2–3 heads",
+    "Carrots — 1 kg",
+    "Spinach — 2 packs",
+    "Mixed vegetables — 1–2 kg",
+    "Tomatoes — 6–8",
+    "Onions — 4–6"
+  ],
+
+  "Fruits":[
+    "Bananas — 10–14",
+    "Apples — 5–7",
+    "Oranges — 4–6"
+  ],
+
+  "Healthy Fats":[
+    "Peanut butter — 1 jar",
+    "Mixed nuts — 300–500 g",
+    "Avocado — 2–3",
+    "Olive oil — 1 bottle"
+  ],
+
+  "Oatside & Coffee":[
+    "Oatside — 2–3 cartons",
+    "Coffee — 1 pack",
+    "Drinking water — enough for 2.5–3 L/day"
+  ]
+
+};
+
+
+function renderShopping(){
+
+  const state =
+    getStorage(
+      STORAGE.shopping,
+      {}
+    );
+
+
+  const root =
+    document.getElementById(
+      "shoppingGrid"
+    );
+
+
+  root.innerHTML = "";
+
+
+  let itemIndex =
+    0;
+
+
+  Object.entries(
+    shoppingData
+  ).forEach(
+    ([category,items]) => {
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "shop-category";
+
+
+      const heading =
+        document.createElement(
+          "h3"
+        );
+
+
+      heading.textContent =
+        category;
+
+
+      card.appendChild(
+        heading
+      );
+
+
+      const list =
+        document.createElement(
+          "div"
+        );
+
+
+      list.className =
+        "shop-list";
+
+
+      items.forEach(item => {
+
+        const key =
+          `shopping-${itemIndex}`;
+
+
+        const label =
+          document.createElement(
+            "label"
+          );
+
+
+        label.className =
+          "shop-item";
+
+
+        const checkbox =
+          document.createElement(
+            "input"
+          );
+
+
+        checkbox.type =
+          "checkbox";
+
+
+        checkbox.checked =
+          Boolean(
+            state[key]
+          );
+
+
+        if(
+          checkbox.checked
+        ){
+
+          label.classList.add(
+            "checked"
+          );
+
+        }
+
+
+        checkbox.addEventListener(
+          "change",
+          () => {
+
+            const current =
+              getStorage(
+                STORAGE.shopping,
+                {}
+              );
+
+
+            current[key] =
+              checkbox.checked;
+
+
+            setStorage(
+              STORAGE.shopping,
+              current
+            );
+
+
+            label.classList.toggle(
+              "checked",
+              checkbox.checked
+            );
+
+
+            updateShoppingProgress();
+
+          }
+        );
+
+
+        const text =
+          document.createElement(
+            "span"
+          );
+
+
+        text.textContent =
+          item;
+
+
+        label.appendChild(
+          checkbox
+        );
+
+
+        label.appendChild(
+          text
+        );
+
+
+        list.appendChild(
+          label
+        );
+
+
+        itemIndex++;
+
+      });
+
+
+      card.appendChild(
+        list
+      );
+
+
+      root.appendChild(
+        card
+      );
+
+    }
+  );
+
+
+  updateShoppingProgress();
+
+}
+
+
+function updateShoppingProgress(){
+
+  const state =
+    getStorage(
+      STORAGE.shopping,
+      {}
+    );
+
+
+  let total =
+    0;
+
+  let checked =
+    0;
+
+
+  Object.values(
+    shoppingData
+  ).forEach(items => {
+
+    total += items.length;
+
+  });
+
+
+  for(
+    const value of Object.values(state)
+  ){
+
+    if(value){
+
+      checked++;
+
+    }
+
+  }
+
+
+  document.getElementById(
+    "shoppingProgress"
+  ).textContent =
+    `${checked} / ${total} items checked`;
+
+}
+
+
+document.getElementById(
+  "resetShopping"
+).addEventListener(
+  "click",
+  () => {
+
+    if(
+      !confirm(
+        "Reset the shopping list?"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    localStorage.removeItem(
+      STORAGE.shopping
+    );
+
+
+    renderShopping();
+
+  }
+);
+
+
+/* =========================================================
+   RESET ALL MANUAL EDITS
+=========================================================
+
+   This function is intentionally available from browser
+   console if needed:
+
+   resetManualEdits();
+
+========================================================= */
+
+function resetManualEdits(){
+
+  localStorage.removeItem(
+    STORAGE.edits
+  );
+
+  location.reload();
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+function initializeApp(){
+
+  initializeTabs();
+
+  initializeManualEditing();
+
+  renderDaySwitcher();
+
+  renderDailySchedule();
+
+  renderTracker();
+
+  renderRecovery();
+
+  renderShopping();
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  initializeApp
+);
+
+</script>
+
+</body>
+</html>
