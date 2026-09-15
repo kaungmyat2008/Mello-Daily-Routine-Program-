@@ -4,23 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#faf8f5">
-<title>MELLO — 31-Day Performance Planner</title>
+<title>MELLO — Personal Performance System</title>
 
 <style>
 :root{
   --bg:#faf8f5;
-  --surface:#fffdf9;
-  --surface2:#f3efe9;
-  --text:#1f1f1d;
-  --muted:#6f6b65;
-  --line:#ddd7cf;
-  --accent:#6f7f68;
-  --accent-soft:#e9eee6;
-  --danger:#a85f58;
-  --shadow:0 12px 35px rgba(34,31,27,.06);
-  --radius-lg:24px;
-  --radius-md:16px;
-  --radius-sm:11px;
+  --surface:#ffffff;
+  --surface2:#f5f1ec;
+  --text:#242321;
+  --muted:#77736d;
+  --line:#e8e2db;
+  --soft:#eee9e2;
+  --success:#536b55;
+  --danger:#8a5555;
+  --radius:16px;
+  --shadow:0 8px 30px rgba(35,31,27,.04);
 }
 
 *{
@@ -35,1443 +33,2248 @@ body{
   margin:0;
   background:var(--bg);
   color:var(--text);
-  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",
-  Roboto,Helvetica,Arial,sans-serif;
-  line-height:1.5;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:14px;
+  line-height:1.55;
 }
 
-button,input{
+button,
+input,
+textarea,
+select{
   font:inherit;
 }
 
 button{
-  color:inherit;
-}
-
-button,label,input[type="checkbox"]{
-  -webkit-tap-highlight-color:transparent;
+  cursor:pointer;
 }
 
 .app{
-  width:min(1180px,calc(100% - 32px));
-  margin:auto;
-  padding:28px 0 60px;
+  display:flex;
+  min-height:100vh;
 }
 
-/* ================= HERO ================= */
+/* =========================
+   SIDEBAR
+========================= */
 
-.hero{
-  position:relative;
-  overflow:hidden;
-  padding:38px;
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(111,127,104,.14),
-      transparent 36%
-    ),
-    var(--surface);
-  border:1px solid var(--line);
-  border-radius:30px;
-  box-shadow:var(--shadow);
+.sidebar{
+  width:245px;
+  min-height:100vh;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  padding:28px 18px;
+  background:var(--bg);
+  border-right:1px solid var(--line);
+  z-index:100;
 }
 
-.hero::after{
-  content:"";
-  position:absolute;
-  right:-80px;
-  bottom:-120px;
-  width:300px;
-  height:300px;
-  border:1px solid rgba(111,127,104,.15);
-  border-radius:50%;
-  pointer-events:none;
+.brand{
+  padding:4px 10px 28px;
 }
 
-.eyebrow{
-  margin:0 0 10px;
-  color:var(--accent);
-  font-size:.73rem;
-  font-weight:850;
-  letter-spacing:.16em;
-  text-transform:uppercase;
+.brand-name{
+  font-size:21px;
+  font-weight:700;
+  letter-spacing:-.05em;
 }
 
-h1,h2,h3,p{
-  margin-top:0;
-}
-
-h1{
-  max-width:850px;
-  margin-bottom:14px;
-  font-size:clamp(2.4rem,6vw,4.8rem);
-  line-height:.96;
-  letter-spacing:-.06em;
-}
-
-.hero-description{
-  max-width:760px;
-  margin-bottom:26px;
+.brand-sub{
+  margin-top:4px;
+  font-size:10px;
   color:var(--muted);
-}
-
-.hero-stats{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
-}
-
-.stat-card{
-  min-height:92px;
-  padding:15px;
-  background:rgba(255,253,249,.72);
-  border:1px solid var(--line);
-  border-radius:16px;
-}
-
-.stat-label{
-  display:block;
-  margin-bottom:6px;
-  color:var(--muted);
-  font-size:.7rem;
-  font-weight:800;
   letter-spacing:.1em;
   text-transform:uppercase;
 }
 
-.stat-value{
-  font-size:.96rem;
-  font-weight:800;
-  line-height:1.35;
-}
-
-/* ================= NAV ================= */
-
-.tabs{
-  position:sticky;
-  top:8px;
-  z-index:20;
+.nav{
   display:flex;
-  gap:7px;
-  margin:18px 0;
-  padding:8px;
-  overflow-x:auto;
-  background:rgba(250,248,245,.93);
-  border:1px solid var(--line);
-  border-radius:16px;
-  backdrop-filter:blur(15px);
-  scrollbar-width:none;
+  flex-direction:column;
+  gap:4px;
 }
 
-.tabs::-webkit-scrollbar{
-  display:none;
-}
-
-.tab-btn{
-  flex:0 0 auto;
-  padding:10px 14px;
-  color:var(--muted);
-  font-size:.83rem;
-  font-weight:800;
-  background:transparent;
+.nav button{
+  width:100%;
   border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:11px 12px;
+  text-align:left;
   border-radius:10px;
-  cursor:pointer;
-  transition:.2s ease;
+  transition:.2s;
 }
 
-.tab-btn:hover{
+.nav button:hover{
+  background:var(--soft);
   color:var(--text);
-  background:var(--surface2);
 }
 
-.tab-btn.active{
-  color:#fff;
+.nav button.active{
   background:var(--text);
+  color:#fff;
 }
 
-/* ================= PANELS ================= */
+.sidebar-bottom{
+  position:absolute;
+  left:18px;
+  right:18px;
+  bottom:24px;
+}
 
-.panel{
+.save-status{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:9px 11px;
+  color:var(--muted);
+  font-size:10px;
+  background:rgba(255,255,255,.45);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+  width:100%;
+  max-width:1500px;
+  margin-left:245px;
+  padding:36px 42px 70px;
+}
+
+.page{
   display:none;
-  animation:panelFade .2s ease;
 }
 
-.panel.active{
+.page.active{
   display:block;
 }
 
-@keyframes panelFade{
-  from{
-    opacity:.45;
-    transform:translateY(5px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-.section-card{
-  margin-bottom:18px;
-  padding:27px;
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:var(--radius-lg);
-  box-shadow:var(--shadow);
-}
-
-.section-header{
+.page-header{
   display:flex;
+  align-items:flex-start;
   justify-content:space-between;
-  align-items:flex-end;
   gap:20px;
-  margin-bottom:21px;
+  margin-bottom:28px;
 }
 
-.section-header h2{
-  margin-bottom:5px;
-  font-size:clamp(1.55rem,3vw,2.3rem);
-  letter-spacing:-.04em;
+.eyebrow{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.13em;
+  margin-bottom:8px;
 }
 
-.section-header p{
-  margin-bottom:0;
+h1{
+  margin:0;
+  font-size:32px;
+  line-height:1.15;
+  letter-spacing:-.055em;
+}
+
+h2{
+  margin:0 0 14px;
+  font-size:19px;
+  letter-spacing:-.03em;
+}
+
+h3{
+  margin:0 0 8px;
+  font-size:15px;
+}
+
+p{
+  margin:0 0 9px;
+}
+
+.muted{
   color:var(--muted);
 }
 
-/* ================= EDITABLE ================= */
+.notice{
+  padding:14px 16px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--surface2);
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:20px;
+}
+
+/* =========================
+   CARDS / GRID
+========================= */
+
+.card{
+  background:rgba(255,255,255,.68);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+
+.grid{
+  display:grid;
+  gap:16px;
+}
+
+.grid-2{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+.grid-3{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+
+.grid-4{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+.section{
+  margin-bottom:24px;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:17px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.stat-value{
+  margin-top:5px;
+  font-size:21px;
+  font-weight:700;
+  letter-spacing:-.035em;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.btn{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--text);
+  border-radius:9px;
+  padding:9px 13px;
+  transition:.2s;
+}
+
+.btn:hover{
+  background:var(--soft);
+}
+
+.btn.primary{
+  color:#fff;
+  background:var(--text);
+  border-color:var(--text);
+}
+
+.btn.danger{
+  color:var(--danger);
+}
+
+/* =========================
+   CONTENT EDITING
+========================= */
 
 [contenteditable="true"]{
   outline:none;
-  border-radius:6px;
-  transition:.15s ease;
+  border-radius:5px;
+  transition:.15s;
 }
 
 [contenteditable="true"]:hover{
-  background:rgba(111,127,104,.055);
+  background:rgba(238,233,226,.55);
 }
 
 [contenteditable="true"]:focus{
   background:#fff;
-  box-shadow:0 0 0 2px rgba(111,127,104,.18);
+  box-shadow:0 0 0 2px rgba(36,35,33,.08);
 }
 
-.edit-hint{
-  margin-top:8px;
-  color:var(--muted);
-  font-size:.72rem;
-}
+/* =========================
+   TABLE
+========================= */
 
-.save-status{
-  color:var(--accent);
-  font-size:.73rem;
-  font-weight:750;
-}
-
-/* ================= WEEKLY ================= */
-
-.weekly-grid{
-  display:grid;
-  grid-template-columns:repeat(7,minmax(150px,1fr));
-  gap:10px;
-  overflow-x:auto;
-  padding-bottom:5px;
-}
-
-.week-card{
-  min-width:150px;
-  padding:15px;
-  background:var(--bg);
-  border:1px solid var(--line);
-  border-radius:16px;
-}
-
-.week-day{
-  margin-bottom:10px;
-  color:var(--muted);
-  font-size:.71rem;
-  font-weight:850;
-  letter-spacing:.1em;
-}
-
-.week-focus{
-  min-height:62px;
-  margin-bottom:13px;
-  font-size:.92rem;
-  font-weight:850;
-  line-height:1.3;
-}
-
-.week-note{
-  padding-top:10px;
-  color:var(--muted);
-  font-size:.75rem;
-  border-top:1px solid var(--line);
-}
-
-.legend{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:18px;
-}
-
-.legend-item,
-.category-tag{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  padding:6px 10px;
-  color:var(--muted);
-  font-size:.72rem;
-  font-weight:750;
-  white-space:nowrap;
-  background:var(--bg);
-  border:1px solid var(--line);
-  border-radius:999px;
-}
-
-.legend-dot{
-  width:8px;
-  height:8px;
-  background:var(--accent);
-  border-radius:50%;
-}
-
-/* ================= TABLE ================= */
-
-.table-scroll{
+.table-wrap{
+  width:100%;
   overflow-x:auto;
   border:1px solid var(--line);
-  border-radius:15px;
+  border-radius:13px;
+  background:#fff;
 }
 
 table{
   width:100%;
-  min-width:720px;
   border-collapse:collapse;
+  min-width:700px;
 }
 
-th,td{
-  padding:13px 14px;
-  vertical-align:middle;
+th,
+td{
+  padding:11px 12px;
   text-align:left;
+  vertical-align:top;
   border-bottom:1px solid var(--line);
 }
 
 th{
-  color:var(--muted);
-  font-size:.7rem;
-  font-weight:850;
-  letter-spacing:.08em;
-  text-transform:uppercase;
   background:var(--surface2);
+  color:var(--muted);
+  font-size:10px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.07em;
 }
 
-tbody tr:last-child td{
+td{
+  font-size:13px;
+}
+
+tr:last-child td{
   border-bottom:0;
 }
 
-/* ================= DAILY ================= */
-
-.day-switcher{
-  display:flex;
-  gap:8px;
-  padding-bottom:8px;
-  overflow-x:auto;
-  scrollbar-width:none;
+.day-cell{
+  font-weight:700;
+  white-space:nowrap;
 }
 
-.day-switcher::-webkit-scrollbar{
-  display:none;
-}
-
-.day-btn{
-  flex:0 0 auto;
-  padding:8px 13px;
+.tag{
+  display:inline-flex;
+  padding:4px 7px;
+  border-radius:6px;
+  background:var(--surface2);
   color:var(--muted);
-  font-size:.8rem;
-  font-weight:800;
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:999px;
-  cursor:pointer;
+  font-size:10px;
+  margin:2px 3px 2px 0;
 }
 
-.day-btn.active{
-  color:#354034;
-  background:var(--accent-soft);
-  border-color:#cad4c5;
+/* =========================
+   ROUTINE
+========================= */
+
+.routine-card{
+  margin-bottom:15px;
 }
 
-.schedule-top{
+.routine-header{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  gap:18px;
-  margin:18px 0 14px;
-  padding-bottom:17px;
-  border-bottom:1px solid var(--line);
-}
-
-.schedule-top h3{
-  margin-bottom:4px;
-  font-size:clamp(1.6rem,3vw,2.2rem);
-  letter-spacing:-.04em;
-}
-
-.schedule-focus{
-  margin:0;
-  color:var(--muted);
-  font-weight:650;
-}
-
-.schedule-range{
-  padding:6px 10px;
-  color:var(--muted);
-  font-size:.71rem;
-  font-weight:800;
-  background:var(--bg);
-  border:1px solid var(--line);
-  border-radius:999px;
-}
-
-.timeline{
-  position:relative;
-  display:grid;
-  gap:8px;
-}
-
-.timeline::before{
-  content:"";
-  position:absolute;
-  top:0;
-  bottom:0;
-  left:127px;
-  width:1px;
-  background:var(--line);
-}
-
-.timeline-row{
-  position:relative;
-  display:grid;
-  grid-template-columns:110px 1fr;
-  align-items:start;
-  gap:36px;
-  min-height:52px;
-}
-
-.timeline-row::before{
-  content:"";
-  position:absolute;
-  top:16px;
-  left:122px;
-  z-index:2;
-  width:10px;
-  height:10px;
-  background:var(--surface);
-  border:2px solid var(--accent);
-  border-radius:50%;
-}
-
-.time{
-  padding-top:9px;
-  color:var(--muted);
-  font-size:.78rem;
-  font-weight:800;
-  text-align:right;
-}
-
-.activity-card{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
   gap:15px;
-  min-height:46px;
-  padding:10px 12px;
-  background:var(--bg);
-  border:1px solid var(--line);
-  border-radius:14px;
+  margin-bottom:15px;
 }
 
-.activity-name{
-  font-size:.9rem;
-  font-weight:750;
-  line-height:1.35;
-}
-
-/* ================= TRACKER ================= */
-
-.tracker-header{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  margin-bottom:16px;
-}
-
-.tracker-title h2{
-  margin-bottom:4px;
-  font-size:clamp(1.55rem,3vw,2.3rem);
-  letter-spacing:-.04em;
-}
-
-.tracker-title p{
-  margin:0;
+.routine-day{
   color:var(--muted);
-}
-
-.progress-area{
-  flex:1;
-  min-width:230px;
-  max-width:420px;
-}
-
-.progress-info{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:6px;
-  color:var(--muted);
-  font-size:.75rem;
-  font-weight:750;
-}
-
-.progress-track{
-  height:9px;
-  overflow:hidden;
-  background:var(--surface2);
-  border:1px solid var(--line);
-  border-radius:999px;
-}
-
-.progress-fill{
-  width:0;
-  height:100%;
-  background:var(--accent);
-  transition:width .25s ease;
-}
-
-.tracker th:not(:first-child),
-.tracker td:not(:first-child){
-  text-align:center;
-}
-
-.tracker td:first-child{
-  font-weight:850;
-}
-
-.tracker tr.completed-row td{
-  background:rgba(111,127,104,.04);
-}
-
-/* ================= CHECKBOX ================= */
-
-input[type="checkbox"]{
-  display:inline-grid;
-  place-content:center;
-  appearance:none;
-  width:20px;
-  height:20px;
-  margin:0;
-  background:#fff;
-  border:1.6px solid #aaa49d;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-input[type="checkbox"]::before{
-  content:"✓";
-  color:#fff;
-  font-size:13px;
-  font-weight:900;
-  transform:scale(0);
-  transition:.12s ease;
-}
-
-input[type="checkbox"]:checked{
-  background:var(--accent);
-  border-color:var(--accent);
-}
-
-input[type="checkbox"]:checked::before{
-  transform:scale(1);
-}
-
-/* ================= RECOVERY ================= */
-
-.sleep-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.sleep-card{
-  padding:20px;
-  background:var(--bg);
-  border:1px solid var(--line);
-  border-radius:16px;
-}
-
-.sleep-card span{
-  display:block;
-  margin-bottom:5px;
-  color:var(--muted);
-  font-size:.7rem;
-  font-weight:850;
-  letter-spacing:.1em;
+  font-size:10px;
   text-transform:uppercase;
+  letter-spacing:.12em;
 }
 
-.sleep-card strong{
-  font-size:1.25rem;
+.routine-title{
+  font-size:19px;
+  font-weight:700;
   letter-spacing:-.03em;
 }
 
-.checklist-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
+.routine-focus{
+  padding:5px 8px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:var(--surface2);
+  font-size:10px;
+  white-space:nowrap;
 }
 
-.check-item{
+.routine-table{
+  min-width:850px;
+}
+
+.time{
+  width:155px;
+  white-space:nowrap;
+  font-weight:600;
+}
+
+.activity{
+  font-weight:500;
+}
+
+/* =========================
+   TRAINING
+========================= */
+
+.training-card{
+  margin-bottom:13px;
+}
+
+.training-head{
   display:flex;
-  align-items:center;
-  gap:12px;
-  padding:14px;
-  font-size:.88rem;
-  font-weight:750;
-  background:var(--bg);
-  border:1px solid var(--line);
-  border-radius:14px;
-  cursor:pointer;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
 }
 
-.check-item.checked{
-  background:var(--accent-soft);
-}
-
-/* ================= FOOD PLAN ================= */
-
-.food-intro{
-  display:grid;
-  grid-template-columns:2fr 1fr;
-  gap:14px;
-  margin-bottom:18px;
-}
-
-.macro-main{
-  padding:22px;
-  background:var(--bg);
-  border:1px solid var(--line);
-  border-radius:17px;
-}
-
-.macro-main h3{
-  margin-bottom:7px;
-}
-
-.macro-main p{
-  margin-bottom:0;
+.training-day{
   color:var(--muted);
-  font-size:.86rem;
-}
-
-.macro-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:9px;
-}
-
-.macro-card{
-  padding:16px;
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:14px;
-}
-
-.macro-card small{
-  display:block;
-  color:var(--muted);
-  font-size:.67rem;
-  font-weight:800;
-  letter-spacing:.08em;
+  font-size:10px;
+  letter-spacing:.1em;
   text-transform:uppercase;
 }
 
-.macro-card strong{
+.training-title{
+  margin-top:3px;
+  font-size:18px;
+  font-weight:700;
+}
+
+.duration{
+  padding:5px 8px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:var(--surface2);
+  font-size:10px;
+  white-space:nowrap;
+}
+
+.exercise-list{
+  margin:14px 0 0;
+  padding-left:20px;
+}
+
+.exercise-list li{
+  margin:5px 0;
+}
+
+.rule-list{
+  margin:0;
+  padding-left:20px;
+}
+
+.rule-list li{
+  margin:8px 0;
+}
+
+/* =========================
+   MACROS
+========================= */
+
+.macro-row{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:9px;
+}
+
+.macro{
+  padding:14px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:11px;
+}
+
+.macro span{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+}
+
+.macro strong{
   display:block;
   margin-top:4px;
-  font-size:1.05rem;
+  font-size:17px;
 }
 
-.food-table{
-  min-width:1150px;
-}
+/* =========================
+   TRACKER
+========================= */
 
-.food-table th,
-.food-table td{
-  font-size:.78rem;
-}
-
-.meal-name{
-  font-weight:850;
-  white-space:nowrap;
-}
-
-.food-cell{
-  max-width:220px;
-  line-height:1.45;
-}
-
-.food-macro{
-  white-space:nowrap;
-  color:var(--muted);
-}
-
-/* ================= SHOPPING ================= */
-
-.shopping-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
+.progress-box{
+  display:flex;
+  align-items:center;
   gap:14px;
 }
 
-.shop-category{
-  padding:20px;
-  background:var(--bg);
-  border:1px solid var(--line);
-  border-radius:17px;
+.progress-track{
+  height:8px;
+  flex:1;
+  overflow:hidden;
+  background:var(--soft);
+  border-radius:99px;
 }
 
-.shop-category h3{
-  margin-bottom:13px;
-  font-size:1rem;
+.progress-bar{
+  width:0%;
+  height:100%;
+  background:var(--text);
+  transition:.25s;
 }
 
-.shop-list{
+.progress-text{
+  white-space:nowrap;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.tracker-table{
+  min-width:900px;
+}
+
+.checkbox{
+  width:17px;
+  height:17px;
+  cursor:pointer;
+  accent-color:#242321;
+}
+
+.check-cell{
+  text-align:center;
+  vertical-align:middle;
+}
+
+.day-number{
+  font-weight:700;
+}
+
+/* =========================
+   RECOVERY
+========================= */
+
+.recovery-list{
   display:grid;
   gap:8px;
 }
 
-.shop-item{
+.recovery-item{
   display:flex;
   align-items:center;
   gap:10px;
-  padding:9px 0;
-  border-bottom:1px solid var(--line);
-}
-
-.shop-item:last-child{
-  border-bottom:0;
-}
-
-.shop-item input{
-  flex:0 0 auto;
-}
-
-.shop-item span{
-  font-size:.82rem;
-  font-weight:650;
-}
-
-.shop-item.checked span{
-  color:var(--muted);
-  text-decoration:line-through;
-}
-
-.shopping-summary{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  margin-top:15px;
-  padding:15px;
-  background:var(--accent-soft);
-  border:1px solid #d6ded2;
-  border-radius:14px;
-}
-
-.shopping-summary strong{
-  font-size:.9rem;
-}
-
-/* ================= PRIORITY ================= */
-
-.priority-grid{
-  display:grid;
-  grid-template-columns:repeat(7,minmax(125px,1fr));
-  gap:9px;
-  overflow-x:auto;
-}
-
-.priority-card{
-  min-width:125px;
-  padding:15px;
-  background:var(--bg);
-  border:1px solid var(--line);
-  border-radius:14px;
-}
-
-.priority-number{
-  margin-bottom:15px;
-  color:var(--accent);
-  font-size:.7rem;
-  font-weight:900;
-  letter-spacing:.1em;
-}
-
-.priority-name{
-  font-size:.82rem;
-  font-weight:850;
-}
-
-/* ================= BUTTON ================= */
-
-.secondary-btn{
-  padding:9px 12px;
-  font-size:.77rem;
-  font-weight:800;
-  background:var(--surface);
+  padding:12px 13px;
   border:1px solid var(--line);
   border-radius:10px;
-  cursor:pointer;
+  background:#fff;
 }
 
-.secondary-btn:hover{
-  background:var(--surface2);
+.recovery-item label{
+  flex:1;
 }
 
-.danger-btn{
-  color:var(--danger);
-}
-
-/* ================= FOOTER ================= */
+/* =========================
+   FOOTER
+========================= */
 
 .footer{
-  padding-top:22px;
-  color:var(--muted);
-  font-size:.8rem;
+  padding:25px 0 0;
   text-align:center;
+  color:var(--muted);
+  font-size:10px;
 }
 
-.quote{
-  margin-top:8px;
-  color:var(--text);
-  font-size:.96rem;
-  font-weight:750;
+/* =========================
+   MOBILE
+========================= */
+
+.mobile-header{
+  display:none;
 }
 
-/* ================= RESPONSIVE ================= */
+@media(max-width:950px){
 
-@media(max-width:1050px){
+  .sidebar{
+    width:210px;
+  }
 
-  .hero-stats{
+  .main{
+    margin-left:210px;
+    padding:25px;
+  }
+
+  .stats{
     grid-template-columns:repeat(2,1fr);
   }
 
-  .weekly-grid{
-    grid-template-columns:repeat(7,170px);
-  }
-
-  .priority-grid{
-    grid-template-columns:repeat(7,145px);
-  }
-}
-
-@media(max-width:800px){
-
-  .food-intro{
-    grid-template-columns:1fr;
-  }
-
-  .shopping-grid{
-    grid-template-columns:1fr;
-  }
-
-  .macro-grid{
+  .grid-3,
+  .grid-4{
     grid-template-columns:repeat(2,1fr);
   }
 
-  .sleep-grid{
-    grid-template-columns:1fr;
-  }
 }
 
 @media(max-width:700px){
 
-  .app{
-    width:calc(100% - 20px);
-    padding:10px 0 45px;
+  .sidebar{
+    display:none;
   }
 
-  .hero{
-    padding:26px 20px;
-    border-radius:22px;
+  .mobile-header{
+    display:flex;
+    position:fixed;
+    left:0;
+    right:0;
+    top:0;
+    z-index:200;
+    height:56px;
+    padding:0 13px;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid var(--line);
+    background:rgba(250,248,245,.96);
+    backdrop-filter:blur(10px);
+  }
+
+  .mobile-brand{
+    font-weight:700;
+    letter-spacing:-.04em;
+  }
+
+  .mobile-nav{
+    display:flex;
+    gap:5px;
+    max-width:77%;
+    overflow-x:auto;
+  }
+
+  .mobile-nav button{
+    padding:6px 9px;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:8px;
+    white-space:nowrap;
+    font-size:10px;
+  }
+
+  .main{
+    margin-left:0;
+    padding:75px 14px 40px;
+  }
+
+  .page-header{
+    flex-direction:column;
   }
 
   h1{
-    font-size:clamp(2.4rem,12vw,3.9rem);
+    font-size:27px;
   }
 
-  .section-card{
-    padding:19px;
-    border-radius:19px;
-  }
-
-  .section-header{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  .schedule-top{
-    flex-direction:column;
-    gap:10px;
-  }
-
-  .timeline::before{
-    left:8px;
-  }
-
-  .timeline-row{
-    grid-template-columns:1fr;
-    gap:5px;
-    padding-left:27px;
-  }
-
-  .timeline-row::before{
-    top:14px;
-    left:3px;
-  }
-
-  .time{
-    padding-top:0;
-    text-align:left;
-    font-size:.72rem;
-  }
-
-  .activity-card{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:7px;
-  }
-
-  .checklist-grid{
+  .grid-2,
+  .grid-3,
+  .grid-4{
     grid-template-columns:1fr;
   }
 
-  .tabs{
-    top:5px;
+  .stats{
+    grid-template-columns:1fr 1fr;
   }
 
-  .tracker-header{
-    align-items:flex-start;
+  .macro-row{
+    grid-template-columns:1fr 1fr;
   }
 
-  .progress-area{
-    width:100%;
-    max-width:none;
+  .card{
+    padding:16px;
   }
 
-  .shopping-summary{
+  .routine-header,
+  .training-head{
     flex-direction:column;
   }
 }
 
-@media(max-width:480px){
+/* =========================
+   PRINT
+========================= */
 
-  .hero-stats{
-    grid-template-columns:1fr;
+@media print{
+
+  .sidebar,
+  .mobile-header,
+  .actions,
+  #adminControls{
+    display:none!important;
   }
 
-  .stat-card{
-    min-height:auto;
+  .main{
+    margin:0;
+    padding:20px;
+    max-width:none;
   }
 
-  .tab-btn{
-    padding:9px 11px;
+  .page{
+    display:block!important;
   }
 
-  .macro-grid{
-    grid-template-columns:1fr 1fr;
+  .card,
+  .stat{
+    box-shadow:none;
   }
 }
 </style>
 </head>
 
-
 <body>
 
-<main class="app">
+<div class="app">
 
-<!-- ======================================================
-     HERO
-====================================================== -->
+<!-- ==========================================================
+     SIDEBAR
+========================================================== -->
 
-<header class="hero">
+<aside class="sidebar">
 
-  <p class="eyebrow">
-    MELLO — Performance System
-  </p>
+  <div class="brand">
+    <div class="brand-name">MELLO</div>
+    <div class="brand-sub">Personal Performance System</div>
+  </div>
 
-  <h1
-    contenteditable="true"
-    data-edit="heroTitle"
-  >
-    31-Day<br>
-    Performance Routine
-  </h1>
+  <nav class="nav">
 
-  <p
-    class="hero-description"
-    contenteditable="true"
-    data-edit="heroDescription"
-  >
-    Fitness × University × Creative Work × Basketball.
-    A clean daily system designed for training,
-    productivity, recovery, nutrition and consistency.
-  </p>
+    <button class="nav-btn active" data-page="dashboard">
+      Overview
+    </button>
 
-  <div class="hero-stats">
+    <button class="nav-btn" data-page="routine">
+      Daily Routine
+    </button>
 
-    <div class="stat-card">
-      <span class="stat-label">Sleep</span>
+    <button class="nav-btn" data-page="training">
+      Training
+    </button>
 
-      <div
-        class="stat-value"
-        contenteditable="true"
-        data-edit="heroSleep"
-      >
-        11:30 PM – 7:30 AM
-      </div>
+    <button class="nav-btn" data-page="food">
+      Food Plan
+    </button>
+
+    <button class="nav-btn" data-page="shopping">
+      Shopping List
+    </button>
+
+    <button class="nav-btn" data-page="tracker">
+      31-Day Tracker
+    </button>
+
+    <button class="nav-btn" data-page="recovery">
+      Recovery
+    </button>
+
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="save-status" id="saveStatus">
+      Local changes saved
     </div>
+  </div>
+
+</aside>
 
 
-    <div class="stat-card">
-      <span class="stat-label">Fitness Goal</span>
+<!-- ==========================================================
+     MOBILE NAV
+========================================================== -->
 
-      <div
-        class="stat-value"
-        contenteditable="true"
-        data-edit="heroFitness"
-      >
-        Lean Bulk + Strength
-      </div>
-    </div>
+<header class="mobile-header">
 
+  <div class="mobile-brand">
+    MELLO
+  </div>
 
-    <div class="stat-card">
-      <span class="stat-label">Athletic Goal</span>
+  <div class="mobile-nav">
 
-      <div
-        class="stat-value"
-        contenteditable="true"
-        data-edit="heroAthletic"
-      >
-        Speed + Jump + Basketball
-      </div>
-    </div>
-
-
-    <div class="stat-card">
-      <span class="stat-label">Nutrition</span>
-
-      <div
-        class="stat-value"
-        contenteditable="true"
-        data-edit="heroNutrition"
-      >
-        ~2,700 kcal / day
-      </div>
-    </div>
+    <button onclick="showPage('dashboard')">Overview</button>
+    <button onclick="showPage('routine')">Routine</button>
+    <button onclick="showPage('training')">Training</button>
+    <button onclick="showPage('food')">Food</button>
+    <button onclick="showPage('shopping')">Shopping</button>
+    <button onclick="showPage('tracker')">Tracker</button>
+    <button onclick="showPage('recovery')">Recovery</button>
 
   </div>
 
 </header>
 
 
-<!-- ======================================================
-     NAVIGATION
-====================================================== -->
-
-<nav class="tabs">
-
-  <button class="tab-btn active" data-tab="overview">
-    Weekly Overview
-  </button>
-
-  <button class="tab-btn" data-tab="daily">
-    Daily Schedules
-  </button>
-
-  <button class="tab-btn" data-tab="food">
-    Food Plan
-  </button>
-
-  <button class="tab-btn" data-tab="shopping">
-    Shopping List
-  </button>
-
-  <button class="tab-btn" data-tab="tracker">
-    31-Day Tracker
-  </button>
-
-  <button class="tab-btn" data-tab="recovery">
-    Recovery Checklist
-  </button>
-
-</nav>
+<main class="main">
 
 
-<!-- ======================================================
-     WEEKLY OVERVIEW
-====================================================== -->
+<!-- ==========================================================
+     OVERVIEW
+========================================================== -->
 
-<section class="panel active" id="overview">
+<section class="page active" id="dashboard">
 
-  <article class="section-card">
+  <div class="page-header">
 
-    <div class="section-header">
+    <div>
 
-      <div>
-        <p class="eyebrow">Weekly System</p>
-
-        <h2 contenteditable="true" data-edit="weeklyTitle">
-          Training Overview
-        </h2>
-
-        <p contenteditable="true" data-edit="weeklyDescription">
-          Monday to Sunday training structure.
-        </p>
+      <div class="eyebrow" contenteditable="true">
+        Personal Performance System
       </div>
 
-      <span class="save-status">
-        Auto-save enabled
-      </span>
+      <h1 contenteditable="true">
+        MELLO — Lean Bulk & Performance
+      </h1>
+
+      <p class="muted" contenteditable="true">
+        Strength · Speed · Vertical Jump · Basketball · Study · Recovery
+      </p>
 
     </div>
 
+    <div class="actions">
 
-    <div class="weekly-grid">
+      <button
+        class="btn primary"
+        onclick="showPage('routine')">
+        Daily Routine
+      </button>
 
-      <article class="week-card">
-
-        <div class="week-day">MONDAY</div>
-
-        <div
-          class="week-focus"
-          contenteditable="true"
-          data-edit="weekMonFocus"
-        >
-          Legs + Jump
-        </div>
-
-        <div
-          class="week-note"
-          contenteditable="true"
-          data-edit="weekMonNote"
-        >
-          Business Statistics
-        </div>
-
-      </article>
-
-
-      <article class="week-card">
-
-        <div class="week-day">TUESDAY</div>
-
-        <div
-          class="week-focus"
-          contenteditable="true"
-          data-edit="weekTueFocus"
-        >
-          Chest + Triceps
-        </div>
-
-        <div
-          class="week-note"
-          contenteditable="true"
-          data-edit="weekTueNote"
-        >
-          Business English + Taxation
-        </div>
-
-      </article>
-
-
-      <article class="week-card">
-
-        <div class="week-day">WEDNESDAY</div>
-
-        <div
-          class="week-focus"
-          contenteditable="true"
-          data-edit="weekWedFocus"
-        >
-          Back + Biceps
-        </div>
-
-        <div
-          class="week-note"
-          contenteditable="true"
-          data-edit="weekWedNote"
-        >
-          Work + Study + Basketball
-        </div>
-
-      </article>
-
-
-      <article class="week-card">
-
-        <div class="week-day">THURSDAY</div>
-
-        <div
-          class="week-focus"
-          contenteditable="true"
-          data-edit="weekThuFocus"
-        >
-          Shoulders + Neck + Core
-        </div>
-
-        <div
-          class="week-note"
-          contenteditable="true"
-          data-edit="weekThuNote"
-        >
-          Macroeconomics + Digital Innovative Thinking
-        </div>
-
-      </article>
-
-
-      <article class="week-card">
-
-        <div class="week-day">FRIDAY</div>
-
-        <div
-          class="week-focus"
-          contenteditable="true"
-          data-edit="weekFriFocus"
-        >
-          Stamina + Basketball
-        </div>
-
-        <div
-          class="week-note"
-          contenteditable="true"
-          data-edit="weekFriNote"
-        >
-          Athletic conditioning
-        </div>
-
-      </article>
-
-
-      <article class="week-card">
-
-        <div class="week-day">SATURDAY</div>
-
-        <div
-          class="week-focus"
-          contenteditable="true"
-          data-edit="weekSatFocus"
-        >
-          Athletic Full Body
-        </div>
-
-        <div
-          class="week-note"
-          contenteditable="true"
-          data-edit="weekSatNote"
-        >
-          Speed + Jump + Basketball
-        </div>
-
-      </article>
-
-
-      <article class="week-card">
-
-        <div class="week-day">SUNDAY</div>
-
-        <div
-          class="week-focus"
-          contenteditable="true"
-          data-edit="weekSunFocus"
-        >
-          Recovery / Rest Day
-        </div>
-
-        <div
-          class="week-note"
-          contenteditable="true"
-          data-edit="weekSunNote"
-        >
-          Mobility + Weekly Planning
-        </div>
-
-      </article>
+      <button
+        class="btn"
+        onclick="window.print()">
+        Print
+      </button>
 
     </div>
 
+  </div>
 
-    <div class="legend">
 
-      <span class="legend-item">
-        <span class="legend-dot"></span>
-        University
-      </span>
+  <div class="notice" contenteditable="true">
 
-      <span class="legend-item">
-        <span class="legend-dot"></span>
-        Work
-      </span>
+    This application is fully editable. Click directly on text,
+    schedules and table cells to make your own changes.
+    Changes are automatically saved in your browser using LocalStorage.
 
-      <span class="legend-item">
-        <span class="legend-dot"></span>
-        Training
-      </span>
+  </div>
 
-      <span class="legend-item">
-        <span class="legend-dot"></span>
-        Basketball
-      </span>
 
-      <span class="legend-item">
-        <span class="legend-dot"></span>
-        Recovery
-      </span>
+  <div class="stats">
 
-      <span class="legend-item">
-        <span class="legend-dot"></span>
-        Sleep
-      </span>
-
+    <div class="stat">
+      <div class="stat-label">Profile</div>
+      <div class="stat-value" contenteditable="true">
+        MELLO
+      </div>
     </div>
 
-  </article>
+    <div class="stat">
+      <div class="stat-label">Weight</div>
+      <div class="stat-value" contenteditable="true">
+        67 kg
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">Height</div>
+      <div class="stat-value" contenteditable="true">
+        175 cm
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">Sleep</div>
+      <div class="stat-value" contenteditable="true">
+        11:30–7:30
+      </div>
+    </div>
+
+  </div>
 
 
-  <!-- UNIVERSITY -->
+  <div class="grid grid-2">
 
-  <article class="section-card">
+    <div class="card">
 
-    <div class="section-header">
+      <h2 contenteditable="true">
+        Weekly Overview
+      </h2>
 
-      <div>
-        <p class="eyebrow">University</p>
+      <div class="table-wrap">
 
-        <h2 contenteditable="true" data-edit="universityTitle">
-          Class Schedule
-        </h2>
+        <table>
 
-        <p>
-          Click any editable text to change it.
-        </p>
+          <thead>
+            <tr>
+              <th>Day</th>
+              <th>Focus</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td class="day-cell" contenteditable="true">MON</td>
+              <td contenteditable="true">Legs + Jump</td>
+              <td contenteditable="true">80–90 min</td>
+            </tr>
+
+            <tr>
+              <td class="day-cell" contenteditable="true">TUE</td>
+              <td contenteditable="true">Chest + Triceps</td>
+              <td contenteditable="true">70–80 min</td>
+            </tr>
+
+            <tr>
+              <td class="day-cell" contenteditable="true">WED</td>
+              <td contenteditable="true">Back + Biceps</td>
+              <td contenteditable="true">70–80 min</td>
+            </tr>
+
+            <tr>
+              <td class="day-cell" contenteditable="true">THU</td>
+              <td contenteditable="true">Shoulders + Neck + Core</td>
+              <td contenteditable="true">65–75 min</td>
+            </tr>
+
+            <tr>
+              <td class="day-cell" contenteditable="true">FRI</td>
+              <td contenteditable="true">Stamina + Basketball</td>
+              <td contenteditable="true">75–90 min</td>
+            </tr>
+
+            <tr>
+              <td class="day-cell" contenteditable="true">SAT</td>
+              <td contenteditable="true">Athletic + Basketball</td>
+              <td contenteditable="true">80–100 min</td>
+            </tr>
+
+            <tr>
+              <td class="day-cell" contenteditable="true">SUN</td>
+              <td contenteditable="true">Full Recovery</td>
+              <td contenteditable="true">20–30 min</td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
       </div>
 
     </div>
 
 
-    <div class="table-scroll">
+    <div class="card">
+
+      <h2 contenteditable="true">
+        5 Golden Rules
+      </h2>
+
+      <ol class="rule-list">
+
+        <li contenteditable="true">
+          Legs + Jump on Monday.
+        </li>
+
+        <li contenteditable="true">
+          No two consecutive hard basketball games.
+          Alternate hard game and skill day.
+        </li>
+
+        <li contenteditable="true">
+          Jump and sprint while fresh.
+        </li>
+
+        <li contenteditable="true">
+          Avoid failure in the gym.
+        </li>
+
+        <li contenteditable="true">
+          Strict sleep window: 11:30 PM – 7:30 AM.
+        </li>
+
+      </ol>
+
+    </div>
+
+  </div>
+
+
+  <div class="card" style="margin-top:16px">
+
+    <h2 contenteditable="true">
+      4-Week Progression Block
+    </h2>
+
+    <div class="grid grid-4">
+
+      <div>
+        <span class="tag">WEEK 1</span>
+        <p contenteditable="true">
+          <strong>Form</strong><br>
+          Technique and movement quality.
+        </p>
+      </div>
+
+      <div>
+        <span class="tag">WEEK 2</span>
+        <p contenteditable="true">
+          <strong>Reps</strong><br>
+          Progress repetitions without losing form.
+        </p>
+      </div>
+
+      <div>
+        <span class="tag">WEEK 3</span>
+        <p contenteditable="true">
+          <strong>Weight</strong><br>
+          Progress load only when technique is ready.
+        </p>
+      </div>
+
+      <div>
+        <span class="tag">WEEK 4</span>
+        <p contenteditable="true">
+          <strong>Quality / Recovery</strong><br>
+          Reduce volume approximately 20–30%.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ==========================================================
+     DAILY ROUTINE
+========================================================== -->
+
+<section class="page" id="routine">
+
+  <div class="page-header">
+
+    <div>
+
+      <div class="eyebrow" contenteditable="true">
+        Daily Schedule
+      </div>
+
+      <h1 contenteditable="true">
+        Daily Routine
+      </h1>
+
+      <p class="muted" contenteditable="true">
+        Monday — Sunday detailed daily timetable
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="notice" contenteditable="true">
+
+    Click any time or activity directly to edit it.
+    Your changes are saved automatically in LocalStorage.
+
+  </div>
+
+
+<!-- MONDAY -->
+
+<div class="card routine-card">
+
+  <div class="routine-header">
+
+    <div>
+      <div class="routine-day" contenteditable="true">
+        MONDAY
+      </div>
+
+      <div class="routine-title" contenteditable="true">
+        Legs + Jump Training Day
+      </div>
+    </div>
+
+    <div class="routine-focus" contenteditable="true">
+      University · Work · Training
+    </div>
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table class="routine-table">
+
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Routine</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td class="time" contenteditable="true">6:30 AM</td>
+          <td class="activity" contenteditable="true">Wake Up</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">6:40–7:00 AM</td>
+          <td contenteditable="true">Water + Light Movement</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:00–7:25 AM</td>
+          <td contenteditable="true">Breakfast</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:30 AM</td>
+          <td contenteditable="true">Leave for University</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">8:30–11:20 AM</td>
+          <td contenteditable="true">University — Business Statistics</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">11:45 AM–12:15 PM</td>
+          <td contenteditable="true">Lunch</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">12:30–2:30 PM</td>
+          <td contenteditable="true">Video Editing / Work</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">2:30–3:30 PM</td>
+          <td contenteditable="true">Rest + Study</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">3:30–4:00 PM</td>
+          <td contenteditable="true">Pre-Workout Meal</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">4:00–5:30 PM</td>
+          <td contenteditable="true">Legs + Jump Training</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">5:30–6:00 PM</td>
+          <td contenteditable="true">Cool Down + Shower</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">6:00–7:00 PM</td>
+          <td contenteditable="true">Dinner</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:00–9:00 PM</td>
+          <td contenteditable="true">Video Editing / Creative Work</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">9:00–10:00 PM</td>
+          <td contenteditable="true">University Review</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">10:00–11:00 PM</td>
+          <td contenteditable="true">Wind Down + Stretching</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">11:00–11:30 PM</td>
+          <td contenteditable="true">No Phone</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">11:30 PM</td>
+          <td contenteditable="true">Sleep</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<!-- TUESDAY -->
+
+<div class="card routine-card">
+
+  <div class="routine-header">
+
+    <div>
+      <div class="routine-day" contenteditable="true">TUESDAY</div>
+      <div class="routine-title" contenteditable="true">
+        Chest + Triceps Routine
+      </div>
+    </div>
+
+    <div class="routine-focus" contenteditable="true">
+      University · Study · Upper Strength
+    </div>
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table class="routine-table">
+
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Routine</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td class="time" contenteditable="true">7:30 AM</td>
+          <td contenteditable="true">Wake Up</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:40–8:00 AM</td>
+          <td contenteditable="true">Water + Light Movement</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">8:00–8:30 AM</td>
+          <td contenteditable="true">Breakfast</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">Morning</td>
+          <td contenteditable="true">University — Business English & Taxation</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">12:00–1:00 PM</td>
+          <td contenteditable="true">Lunch + Rest</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">1:00–2:30 PM</td>
+          <td contenteditable="true">Study / University Work</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">2:30–3:00 PM</td>
+          <td contenteditable="true">Rest + Pre-Workout Meal</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">3:15–4:45 PM</td>
+          <td contenteditable="true">Chest + Triceps Training</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">4:45–5:15 PM</td>
+          <td contenteditable="true">Cool Down + Shower</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">5:15–6:30 PM</td>
+          <td contenteditable="true">Dinner / Recovery</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">6:30–9:30 PM</td>
+          <td contenteditable="true">Study / Video Editing / Creative Work</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">9:30–10:30 PM</td>
+          <td contenteditable="true">University Review</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">10:30–11:30 PM</td>
+          <td contenteditable="true">Wind Down + Stretching</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">11:30 PM</td>
+          <td contenteditable="true">Sleep</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<!-- WEDNESDAY -->
+
+<div class="card routine-card">
+
+  <div class="routine-header">
+
+    <div>
+      <div class="routine-day" contenteditable="true">WEDNESDAY</div>
+
+      <div class="routine-title" contenteditable="true">
+        Back + Biceps & Basketball Skills
+      </div>
+    </div>
+
+    <div class="routine-focus" contenteditable="true">
+      Pull Strength · Basketball
+    </div>
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table class="routine-table">
+
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Routine</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td class="time" contenteditable="true">7:30 AM</td>
+          <td contenteditable="true">Wake Up</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:40–8:00 AM</td>
+          <td contenteditable="true">Water + Light Movement</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">8:00–8:30 AM</td>
+          <td contenteditable="true">Breakfast</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">Morning</td>
+          <td contenteditable="true">Study / University Work</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">12:00–1:00 PM</td>
+          <td contenteditable="true">Lunch</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">1:00–3:00 PM</td>
+          <td contenteditable="true">Study / Video Editing / Work</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">3:00–3:30 PM</td>
+          <td contenteditable="true">Pre-Workout Meal + Rest</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">4:00–5:30 PM</td>
+          <td contenteditable="true">Back + Biceps Training</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">5:30–6:00 PM</td>
+          <td contenteditable="true">Recovery + Shower</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">6:00–7:00 PM</td>
+          <td contenteditable="true">Basketball Skills / Light Shooting</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:00–8:00 PM</td>
+          <td contenteditable="true">Dinner</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">8:00–10:00 PM</td>
+          <td contenteditable="true">Study / Creative Work</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">10:00–11:00 PM</td>
+          <td contenteditable="true">Wind Down + Stretching</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">11:00–11:30 PM</td>
+          <td contenteditable="true">No Phone</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">11:30 PM</td>
+          <td contenteditable="true">Sleep</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<!-- THURSDAY -->
+
+<div class="card routine-card">
+
+  <div class="routine-header">
+
+    <div>
+      <div class="routine-day" contenteditable="true">THURSDAY</div>
+
+      <div class="routine-title" contenteditable="true">
+        Shoulders + Neck + Core
+      </div>
+    </div>
+
+    <div class="routine-focus" contenteditable="true">
+      Athletic Upper
+    </div>
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table class="routine-table">
+
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Routine</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td class="time" contenteditable="true">7:30 AM</td>
+          <td contenteditable="true">Wake Up</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:40–8:00 AM</td>
+          <td contenteditable="true">Water + Light Movement</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">8:00–8:30 AM</td>
+          <td contenteditable="true">Breakfast</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">Morning</td>
+          <td contenteditable="true">
+            University — Macroeconomics & Digital Innovation
+          </td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">12:00–1:00 PM</td>
+          <td contenteditable="true">Lunch</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">1:00–3:30 PM</td>
+          <td contenteditable="true">Study / Video Editing / Work</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">3:30–5:00 PM</td>
+          <td contenteditable="true">Study + Rest</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">5:00–5:30 PM</td>
+          <td contenteditable="true">Pre-Workout Meal</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">6:00–7:30 PM</td>
+          <td contenteditable="true">
+            Shoulders + Neck + Core Training
+          </td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:30–8:00 PM</td>
+          <td contenteditable="true">Cool Down + Shower</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">8:00–9:00 PM</td>
+          <td contenteditable="true">Dinner</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">9:00–10:30 PM</td>
+          <td contenteditable="true">University Review / Creative Work</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">10:30–11:30 PM</td>
+          <td contenteditable="true">Wind Down + Stretching</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">11:30 PM</td>
+          <td contenteditable="true">Sleep</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<!-- FRIDAY -->
+
+<div class="card routine-card">
+
+  <div class="routine-header">
+
+    <div>
+      <div class="routine-day" contenteditable="true">FRIDAY</div>
+
+      <div class="routine-title" contenteditable="true">
+        Stamina + Basketball
+      </div>
+    </div>
+
+    <div class="routine-focus" contenteditable="true">
+      Conditioning · Game
+    </div>
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table class="routine-table">
+
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Routine</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td class="time" contenteditable="true">7:30 AM</td>
+          <td contenteditable="true">Wake Up</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:40–8:00 AM</td>
+          <td contenteditable="true">Water + Light Movement</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">8:00–8:30 AM</td>
+          <td contenteditable="true">Breakfast</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">9:00 AM–12:00 PM</td>
+          <td contenteditable="true">Study / University Work</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">12:00–1:00 PM</td>
+          <td contenteditable="true">Lunch</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">1:00–3:00 PM</td>
+          <td contenteditable="true">Creative Work / Study</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">3:00–3:40 PM</td>
+          <td contenteditable="true">Rest + Pre-Workout Meal</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">4:00–5:00 PM</td>
+          <td contenteditable="true">Stamina Training</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">5:00–6:30 PM</td>
+          <td contenteditable="true">Basketball Training / Game</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">6:30–7:00 PM</td>
+          <td contenteditable="true">Cool Down + Shower</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:00–8:00 PM</td>
+          <td contenteditable="true">Dinner</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">8:00–10:00 PM</td>
+          <td contenteditable="true">Creative Work / Study</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">10:00–11:30 PM</td>
+          <td contenteditable="true">Wind Down + Recovery</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">11:30 PM</td>
+          <td contenteditable="true">Sleep</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<!-- SATURDAY -->
+
+<div class="card routine-card">
+
+  <div class="routine-header">
+
+    <div>
+      <div class="routine-day" contenteditable="true">SATURDAY</div>
+
+      <div class="routine-title" contenteditable="true">
+        Athletic Full Body + Speed + Jump + Basketball Skills
+      </div>
+    </div>
+
+    <div class="routine-focus" contenteditable="true">
+      Athletic · Speed · Jump
+    </div>
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table class="routine-table">
+
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Routine</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td class="time" contenteditable="true">7:30 AM</td>
+          <td contenteditable="true">Wake Up</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:40–8:00 AM</td>
+          <td contenteditable="true">Water + Light Movement</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">8:00–8:30 AM</td>
+          <td contenteditable="true">Breakfast</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">9:00 AM–12:00 PM</td>
+          <td contenteditable="true">Creative Work</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">12:00–1:00 PM</td>
+          <td contenteditable="true">Lunch</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">1:00–3:00 PM</td>
+          <td contenteditable="true">Creative Work / Study</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">3:00–3:40 PM</td>
+          <td contenteditable="true">Rest + Pre-Workout Meal</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">4:00–5:30 PM</td>
+          <td contenteditable="true">Athletic Training</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">5:30–6:00 PM</td>
+          <td contenteditable="true">Speed + Jump</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">6:00–7:00 PM</td>
+          <td contenteditable="true">Basketball Skills</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:00–8:00 PM</td>
+          <td contenteditable="true">Dinner</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">8:00–10:00 PM</td>
+          <td contenteditable="true">Creative Work / Relaxation</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">10:00–11:30 PM</td>
+          <td contenteditable="true">Wind Down + Recovery</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">11:30 PM</td>
+          <td contenteditable="true">Sleep</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<!-- SUNDAY -->
+
+<div class="card routine-card">
+
+  <div class="routine-header">
+
+    <div>
+      <div class="routine-day" contenteditable="true">SUNDAY</div>
+
+      <div class="routine-title" contenteditable="true">
+        Recovery / Rest Day
+      </div>
+    </div>
+
+    <div class="routine-focus" contenteditable="true">
+      Recovery · Planning · Mobility
+    </div>
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table class="routine-table">
+
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Routine</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td class="time" contenteditable="true">8:00 AM</td>
+          <td contenteditable="true">Wake Up / Easy Morning</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">8:15–8:45 AM</td>
+          <td contenteditable="true">Breakfast</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">9:30 AM</td>
+          <td contenteditable="true">Light Walk</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">10:00–11:00 AM</td>
+          <td contenteditable="true">Relax / Personal Time</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">11:00 AM</td>
+          <td contenteditable="true">Weekly Planning</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">12:00–1:00 PM</td>
+          <td contenteditable="true">Lunch</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">1:00–3:30 PM</td>
+          <td contenteditable="true">Rest / Light Study / Personal Time</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">4:00 PM</td>
+          <td contenteditable="true">Stretching + Mobility</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">5:00–7:00 PM</td>
+          <td contenteditable="true">Free Time / Family / Relaxation</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">7:00–8:00 PM</td>
+          <td contenteditable="true">Dinner</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">8:00–10:00 PM</td>
+          <td contenteditable="true">Prepare for Monday</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">10:00–11:00 PM</td>
+          <td contenteditable="true">Wind Down</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">11:00–11:30 PM</td>
+          <td contenteditable="true">No Phone</td>
+        </tr>
+
+        <tr>
+          <td class="time" contenteditable="true">11:30 PM</td>
+          <td contenteditable="true">Sleep</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+</section>
+
+
+<!-- ==========================================================
+     TRAINING
+========================================================== -->
+
+<section class="page" id="training">
+
+  <div class="page-header">
+
+    <div>
+
+      <div class="eyebrow" contenteditable="true">
+        Weekly Training Program
+      </div>
+
+      <h1 contenteditable="true">
+        Training Program
+      </h1>
+
+      <p class="muted" contenteditable="true">
+        MELLO · 67 kg · 175 cm · Strength + Speed + Vertical Jump + Basketball
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="notice" contenteditable="true">
+
+    Progression principle: Form first. Keep controlled effort,
+    avoid failure, and prioritize movement quality.
+
+  </div>
+
+
+  <!-- MON -->
+
+  <div class="card training-card">
+
+    <div class="training-head">
+
+      <div>
+        <div class="training-day" contenteditable="true">
+          MONDAY
+        </div>
+
+        <div class="training-title" contenteditable="true">
+          Legs + Jump — Strength + Power
+        </div>
+      </div>
+
+      <div class="duration" contenteditable="true">
+        80–90 min
+      </div>
+
+    </div>
+
+    <ul class="exercise-list">
+
+      <li contenteditable="true">
+        Box Jump / Broad Jump — before lifting
+      </li>
+
+      <li contenteditable="true">Back Squat</li>
+
+      <li contenteditable="true">Romanian Deadlift</li>
+
+      <li contenteditable="true">Bulgarian Split Squat</li>
+
+      <li contenteditable="true">Leg Press</li>
+
+      <li contenteditable="true">Leg Curl</li>
+
+      <li contenteditable="true">Calf Raise</li>
+
+    </ul>
+
+    <p class="muted" contenteditable="true">
+      RIR 1–3 · No failure
+    </p>
+
+  </div>
+
+
+  <!-- TUE -->
+
+  <div class="card training-card">
+
+    <div class="training-head">
+
+      <div>
+        <div class="training-day" contenteditable="true">
+          TUESDAY
+        </div>
+
+        <div class="training-title" contenteditable="true">
+          Chest + Triceps — Upper Strength
+        </div>
+      </div>
+
+      <div class="duration" contenteditable="true">
+        70–80 min
+      </div>
+
+    </div>
+
+    <ul class="exercise-list">
+
+      <li contenteditable="true">Bench Press</li>
+      <li contenteditable="true">Incline DB Press</li>
+      <li contenteditable="true">Cable Fly</li>
+      <li contenteditable="true">Dips</li>
+      <li contenteditable="true">Triceps Pushdown / Extension</li>
+      <li contenteditable="true">Optional light shooting — 20–30 min</li>
+
+    </ul>
+
+  </div>
+
+
+  <!-- WED -->
+
+  <div class="card training-card">
+
+    <div class="training-head">
+
+      <div>
+        <div class="training-day" contenteditable="true">
+          WEDNESDAY
+        </div>
+
+        <div class="training-title" contenteditable="true">
+          Back + Biceps — Pull Strength
+        </div>
+      </div>
+
+      <div class="duration" contenteditable="true">
+        70–80 min
+      </div>
+
+    </div>
+
+    <ul class="exercise-list">
+
+      <li contenteditable="true">Pull-up / Pulldown</li>
+      <li contenteditable="true">Barbell Row / Row</li>
+      <li contenteditable="true">Seated Row</li>
+      <li contenteditable="true">Face Pull</li>
+      <li contenteditable="true">DB Curl / Hammer Curl</li>
+      <li contenteditable="true">Light Basketball Skills — 20–30 min</li>
+
+    </ul>
+
+  </div>
+
+
+  <!-- THU -->
+
+  <div class="card training-card">
+
+    <div class="training-head">
+
+      <div>
+        <div class="training-day" contenteditable="true">
+          THURSDAY
+        </div>
+
+        <div class="training-title" contenteditable="true">
+          Shoulders + Neck + Core — Athletic Upper
+        </div>
+      </div>
+
+      <div class="duration" contenteditable="true">
+        65–75 min
+      </div>
+
+    </div>
+
+    <ul class="exercise-list">
+
+      <li contenteditable="true">Overhead Press</li>
+      <li contenteditable="true">Lateral Raise</li>
+      <li contenteditable="true">Rear Delt</li>
+      <li contenteditable="true">Shrugs</li>
+      <li contenteditable="true">Neck Flexion / Extension</li>
+      <li contenteditable="true">Hanging Knee Raise</li>
+      <li contenteditable="true">Plank</li>
+      <li contenteditable="true">Pallof Press</li>
+
+    </ul>
+
+  </div>
+
+
+  <!-- FRI -->
+
+  <div class="card training-card">
+
+    <div class="training-head">
+
+      <div>
+        <div class="training-day" contenteditable="true">
+          FRIDAY
+        </div>
+
+        <div class="training-title" contenteditable="true">
+          Stamina + Basketball — Conditioning & Game
+        </div>
+      </div>
+
+      <div class="duration" contenteditable="true">
+        75–90 min
+      </div>
+
+    </div>
+
+    <ul class="exercise-list">
+
+      <li contenteditable="true">Court Sprints</li>
+      <li contenteditable="true">20–30 m Sprints</li>
+      <li contenteditable="true">Shuttle Runs</li>
+      <li contenteditable="true">Shooting</li>
+      <li contenteditable="true">Game — 20–30 min</li>
+
+    </ul>
+
+  </div>
+
+
+  <!-- SAT -->
+
+  <div class="card training-card">
+
+    <div class="training-head">
+
+      <div>
+        <div class="training-day" contenteditable="true">
+          SATURDAY
+        </div>
+
+        <div class="training-title" contenteditable="true">
+          Athletic + Basketball — Speed + Jump + Skills
+        </div>
+      </div>
+
+      <div class="duration" contenteditable="true">
+        80–100 min
+      </div>
+
+    </div>
+
+    <ul class="exercise-list">
+
+      <li contenteditable="true">10 m / 20 m Sprints</li>
+      <li contenteditable="true">Lateral Shuffle</li>
+      <li contenteditable="true">Defensive Slide</li>
+      <li contenteditable="true">Countermovement Jump</li>
+      <li contenteditable="true">Approach Jump</li>
+      <li contenteditable="true">Box Jump</li>
+      <li contenteditable="true">Broad Jump</li>
+      <li contenteditable="true">Trap Bar Deadlift</li>
+      <li contenteditable="true">DB Bench</li>
+      <li contenteditable="true">Pull-ups</li>
+      <li contenteditable="true">Lunges</li>
+      <li contenteditable="true">Basketball Skills — 30–45 min</li>
+
+    </ul>
+
+    <p class="muted" contenteditable="true">
+      Quality &gt; Quantity
+    </p>
+
+  </div>
+
+
+  <!-- SUN -->
+
+  <div class="card training-card">
+
+    <div class="training-head">
+
+      <div>
+        <div class="training-day" contenteditable="true">
+          SUNDAY
+        </div>
+
+        <div class="training-title" contenteditable="true">
+          Full Recovery
+        </div>
+      </div>
+
+      <div class="duration" contenteditable="true">
+        20–30 min
+      </div>
+
+    </div>
+
+    <ul class="exercise-list">
+
+      <li contenteditable="true">Light Walk — 20–30 min</li>
+      <li contenteditable="true">Mobility</li>
+      <li contenteditable="true">Stretching</li>
+
+    </ul>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2 contenteditable="true">
+      Progression System
+    </h2>
+
+    <div class="table-wrap">
 
       <table>
 
         <thead>
           <tr>
-            <th>Day</th>
-            <th>Time</th>
-            <th>Class</th>
-            <th>Room</th>
+            <th>Principle</th>
+            <th>Guideline</th>
           </tr>
         </thead>
 
         <tbody>
 
           <tr>
-            <td>Monday</td>
-
-            <td contenteditable="true" data-edit="uniMonTime">
-              8:30 AM – 11:20 AM
-            </td>
-
-            <td contenteditable="true" data-edit="uniMonClass">
-              Business Statistics
-            </td>
-
-            <td contenteditable="true" data-edit="uniMonRoom">
-              Building 21, Room 21304
+            <td contenteditable="true">Form before weight</td>
+            <td contenteditable="true">
+              Improve technique before adding load.
             </td>
           </tr>
 
-
           <tr>
-            <td>Tuesday</td>
-
-            <td contenteditable="true" data-edit="uniTueTime1">
-              11:30 AM – 2:20 PM
-            </td>
-
-            <td contenteditable="true" data-edit="uniTueClass1">
-              Business English for International Communication 2
-            </td>
-
-            <td contenteditable="true" data-edit="uniTueRoom1">
-              Building 21, Room 21207
-            </td>
+            <td contenteditable="true">Compound RIR</td>
+            <td contenteditable="true">RIR 1–3</td>
           </tr>
 
-
           <tr>
-            <td>Tuesday</td>
-
-            <td contenteditable="true" data-edit="uniTueTime2">
-              5:30 PM – 8:20 PM
-            </td>
-
-            <td contenteditable="true" data-edit="uniTueClass2">
-              Taxation
-            </td>
-
-            <td contenteditable="true" data-edit="uniTueRoom2">
-              Building 21, Room 21203
-            </td>
+            <td contenteditable="true">Isolation RIR</td>
+            <td contenteditable="true">RIR 1–2</td>
           </tr>
 
-
           <tr>
-            <td>Thursday</td>
-
-            <td contenteditable="true" data-edit="uniThuTime1">
-              11:30 AM – 2:20 PM
-            </td>
-
-            <td contenteditable="true" data-edit="uniThuClass1">
-              Macroeconomics
-            </td>
-
-            <td contenteditable="true" data-edit="uniThuRoom1">
-              Building 21, Room 21203
-            </td>
+            <td contenteditable="true">Week 1</td>
+            <td contenteditable="true">Form</td>
           </tr>
 
+          <tr>
+            <td contenteditable="true">Week 2</td>
+            <td contenteditable="true">Reps</td>
+          </tr>
 
           <tr>
-            <td>Thursday</td>
+            <td contenteditable="true">Week 3</td>
+            <td contenteditable="true">Weight</td>
+          </tr>
 
-            <td contenteditable="true" data-edit="uniThuTime2">
-              2:30 PM – 5:20 PM
-            </td>
-
-            <td contenteditable="true" data-edit="uniThuClass2">
-              Digital Innovative Thinking for Business
-            </td>
-
-            <td contenteditable="true" data-edit="uniThuRoom2">
-              Building 21, Room 21303
+          <tr>
+            <td contenteditable="true">Week 4</td>
+            <td contenteditable="true">
+              Quality / Recovery — reduce volume 20–30%
             </td>
           </tr>
 
@@ -1481,224 +2284,98 @@ input[type="checkbox"]:checked::before{
 
     </div>
 
-  </article>
-
-
-  <!-- PRIORITY -->
-
-  <article class="section-card">
-
-    <div class="section-header">
-
-      <div>
-        <p class="eyebrow">System</p>
-
-        <h2>
-          Weekly Priority System
-        </h2>
-      </div>
-
-    </div>
-
-
-    <div class="priority-grid">
-
-      <div class="priority-card">
-        <div class="priority-number">01</div>
-        <div class="priority-name">SLEEP</div>
-      </div>
-
-      <div class="priority-card">
-        <div class="priority-number">02</div>
-        <div class="priority-name">UNIVERSITY</div>
-      </div>
-
-      <div class="priority-card">
-        <div class="priority-number">03</div>
-        <div class="priority-name">WORK</div>
-      </div>
-
-      <div class="priority-card">
-        <div class="priority-number">04</div>
-        <div class="priority-name">TRAINING</div>
-      </div>
-
-      <div class="priority-card">
-        <div class="priority-number">05</div>
-        <div class="priority-name">BASKETBALL</div>
-      </div>
-
-      <div class="priority-card">
-        <div class="priority-number">06</div>
-        <div class="priority-name">RECOVERY</div>
-      </div>
-
-      <div class="priority-card">
-        <div class="priority-number">07</div>
-        <div class="priority-name">PERSONAL TIME</div>
-      </div>
-
-    </div>
-
-  </article>
+  </div>
 
 </section>
 
 
-<!-- ======================================================
-     DAILY SCHEDULES
-====================================================== -->
-
-<section class="panel" id="daily">
-
-  <article class="section-card">
-
-    <div class="section-header">
-
-      <div>
-        <p class="eyebrow">Daily Timeline</p>
-
-        <h2>
-          Daily Schedules
-        </h2>
-
-        <p>
-          Click inside activity or time text to manually edit.
-        </p>
-      </div>
-
-      <span class="save-status">
-        Changes save automatically
-      </span>
-
-    </div>
-
-
-    <div class="day-switcher" id="daySwitcher"></div>
-
-    <div id="scheduleView"></div>
-
-  </article>
-
-</section>
-
-
-<!-- ======================================================
+<!-- ==========================================================
      FOOD PLAN
-====================================================== -->
+========================================================== -->
 
-<section class="panel" id="food">
+<section class="page" id="food">
 
-  <article class="section-card">
+  <div class="page-header">
 
-    <div class="section-header">
+    <div>
 
-      <div>
-        <p class="eyebrow">MELLO Nutrition</p>
-
-        <h2>
-          7-Day Natural Lean Bulk Plan
-        </h2>
-
-        <p>
-          Simple, natural, easy-to-cook meals designed around
-          training, university and basketball.
-        </p>
+      <div class="eyebrow" contenteditable="true">
+        Nutrition
       </div>
 
-      <span class="save-status">
-        Click text to edit
-      </span>
+      <h1 contenteditable="true">
+        Food Plan
+      </h1>
+
+      <p class="muted" contenteditable="true">
+        MELLO 7-Day Natural Lean Bulk
+      </p>
 
     </div>
 
+  </div>
 
-    <div class="food-intro">
 
-      <div class="macro-main">
+  <div class="notice" contenteditable="true">
 
-        <h3>
-          Daily Macro Split
-        </h3>
+    Daily nutrition targets are editable starting points.
+    Keep meals varied and balanced and adjust portions according to
+    energy needs, hunger, activity and recovery.
 
-        <p>
-          Target intake. Adjust portions based on actual body-weight
-          trend, training load and appetite.
-        </p>
+  </div>
 
-        <div class="macro-grid">
 
-          <div class="macro-card">
-            <small>Calories</small>
-            <strong contenteditable="true" data-edit="macroCalories">
-              ~2,700 kcal
-            </strong>
-          </div>
+  <div class="section">
 
-          <div class="macro-card">
-            <small>Protein</small>
-            <strong contenteditable="true" data-edit="macroProtein">
-              140 g
-            </strong>
-          </div>
+    <h2 contenteditable="true">
+      Daily Macro Split
+    </h2>
 
-          <div class="macro-card">
-            <small>Carbs</small>
-            <strong contenteditable="true" data-edit="macroCarbs">
-              350–370 g
-            </strong>
-          </div>
+    <div class="macro-row">
 
-          <div class="macro-card">
-            <small>Fat</small>
-            <strong contenteditable="true" data-edit="macroFat">
-              70–80 g
-            </strong>
-          </div>
-
-        </div>
-
+      <div class="macro">
+        <span>Calories</span>
+        <strong contenteditable="true">~2,700 kcal</strong>
       </div>
 
+      <div class="macro">
+        <span>Protein</span>
+        <strong contenteditable="true">140 g</strong>
+      </div>
 
-      <div class="macro-main">
+      <div class="macro">
+        <span>Carbs</span>
+        <strong contenteditable="true">350–370 g</strong>
+      </div>
 
-        <h3>Hydration</h3>
+      <div class="macro">
+        <span>Fat</span>
+        <strong contenteditable="true">70–80 g</strong>
+      </div>
 
-        <p>
-          Daily water target
-        </p>
-
-        <div style="margin-top:18px">
-
-          <div class="macro-card">
-
-            <small>Water</small>
-
-            <strong
-              contenteditable="true"
-              data-edit="macroWater"
-            >
-              2.5–3 L
-            </strong>
-
-          </div>
-
-        </div>
-
+      <div class="macro">
+        <span>Water</span>
+        <strong contenteditable="true">2.5–3 L</strong>
       </div>
 
     </div>
 
+  </div>
 
-    <div class="table-scroll">
 
-      <table class="food-table">
+  <div class="section">
+
+    <h2 contenteditable="true">
+      Monday — Sunday Meal Plan
+    </h2>
+
+    <div class="table-wrap">
+
+      <table>
 
         <thead>
 
           <tr>
-
             <th>Day</th>
             <th>Breakfast</th>
             <th>Morning Snack</th>
@@ -1708,507 +2385,280 @@ input[type="checkbox"]:checked::before{
             <th>Dinner</th>
             <th>Before Bed</th>
             <th>Macro</th>
-
           </tr>
 
         </thead>
 
-
         <tbody>
-
-
-          <!-- MONDAY -->
 
           <tr>
 
-            <td class="meal-name">
-              Monday
+            <td class="day-cell" contenteditable="true">MON</td>
+
+            <td contenteditable="true">
+              Oats + milk + banana + eggs
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodMonBreakfast"
-            >
-              Oats + banana + 2 eggs + milk
+            <td contenteditable="true">
+              Yogurt + fruit + nuts
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodMonSnack"
-            >
-              Greek yogurt + banana
+            <td contenteditable="true">
+              Rice + chicken + vegetables
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodMonLunch"
-            >
-              Rice + chicken breast + vegetables
+            <td contenteditable="true">
+              Banana + toast + coffee
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodMonPre"
-            >
-              Banana + oats + coffee
-            </td>
-
-            <td class="food-cell">
+            <td contenteditable="true">
               Legs + Jump
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodMonDinner"
-            >
-              Rice + fish + vegetables + egg
+            <td contenteditable="true">
+              Rice + fish/chicken + vegetables + avocado
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodMonBed"
-            >
-              Milk + oats
+            <td contenteditable="true">
+              Milk/yogurt + oats
             </td>
 
-            <td
-              class="food-macro"
-              contenteditable="true"
-              data-edit="foodMonMacro"
-            >
-              ~2,700 kcal / P 140g
+            <td contenteditable="true">
+              ~2,700 / P140 / C350–370 / F70–80
             </td>
 
           </tr>
 
 
-          <!-- TUESDAY -->
-
           <tr>
 
-            <td class="meal-name">
-              Tuesday
+            <td class="day-cell" contenteditable="true">TUE</td>
+
+            <td contenteditable="true">
+              Oats + banana + milk + eggs
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodTueBreakfast"
-            >
-              3 eggs + toast + banana + milk
+            <td contenteditable="true">
+              Yogurt + fruit
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodTueSnack"
-            >
-              Yogurt + oats + fruit
+            <td contenteditable="true">
+              Rice + lean beef + vegetables
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodTueLunch"
-            >
-              Rice + chicken + mixed vegetables
+            <td contenteditable="true">
+              Toast + banana + coffee
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodTuePre"
-            >
-              Banana + toast + coffee
-            </td>
-
-            <td class="food-cell">
+            <td contenteditable="true">
               Chest + Triceps
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodTueDinner"
-            >
-              Rice + lean beef + vegetables
+            <td contenteditable="true">
+              Rice/noodles + chicken + vegetables
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodTueBed"
-            >
-              Milk + banana
-            </td>
-
-            <td
-              class="food-macro"
-              contenteditable="true"
-              data-edit="foodTueMacro"
-            >
-              ~2,700 kcal / P 140g
-            </td>
-
-          </tr>
-
-
-          <!-- WEDNESDAY -->
-
-          <tr>
-
-            <td class="meal-name">
-              Wednesday
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodWedBreakfast"
-            >
-              Oats + peanut butter + banana + 2 eggs
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodWedSnack"
-            >
-              Milk + banana + nuts
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodWedLunch"
-            >
-              Rice + chicken + broccoli + egg
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodWedPre"
-            >
-              Banana + oats + coffee
-            </td>
-
-            <td class="food-cell">
-              Back + Biceps
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodWedDinner"
-            >
-              Rice + fish + vegetables
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodWedBed"
-            >
-              Yogurt + oats
-            </td>
-
-            <td
-              class="food-macro"
-              contenteditable="true"
-              data-edit="foodWedMacro"
-            >
-              ~2,700 kcal / P 140g
-            </td>
-
-          </tr>
-
-
-          <!-- THURSDAY -->
-
-          <tr>
-
-            <td class="meal-name">
-              Thursday
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodThuBreakfast"
-            >
-              Eggs + toast + oats + banana
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodThuSnack"
-            >
-              Greek yogurt + fruit
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodThuLunch"
-            >
-              Rice + chicken + vegetables
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodThuPre"
-            >
-              Banana + toast + coffee
-            </td>
-
-            <td class="food-cell">
-              Shoulders + Neck + Core
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodThuDinner"
-            >
-              Rice + beef + vegetables + egg
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodThuBed"
-            >
-              Milk + oats
-            </td>
-
-            <td
-              class="food-macro"
-              contenteditable="true"
-              data-edit="foodThuMacro"
-            >
-              ~2,700 kcal / P 140g
-            </td>
-
-          </tr>
-
-
-          <!-- FRIDAY -->
-
-          <tr>
-
-            <td class="meal-name">
-              Friday
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodFriBreakfast"
-            >
-              Oats + banana + eggs + milk
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodFriSnack"
-            >
-              Yogurt + banana + nuts
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodFriLunch"
-            >
-              Rice + chicken + vegetables
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodFriPre"
-            >
-              Banana + oats + coffee
-            </td>
-
-            <td class="food-cell">
-              Stamina + Basketball
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodFriDinner"
-            >
-              Rice + fish + vegetables + egg
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodFriBed"
-            >
-              Milk + banana
-            </td>
-
-            <td
-              class="food-macro"
-              contenteditable="true"
-              data-edit="foodFriMacro"
-            >
-              ~2,700 kcal / P 140g
-            </td>
-
-          </tr>
-
-
-          <!-- SATURDAY -->
-
-          <tr>
-
-            <td class="meal-name">
-              Saturday
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodSatBreakfast"
-            >
-              Oats + eggs + banana + milk
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodSatSnack"
-            >
+            <td contenteditable="true">
               Yogurt + oats + fruit
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodSatLunch"
-            >
-              Rice + chicken + vegetables + egg
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodSatPre"
-            >
-              Banana + toast + coffee
-            </td>
-
-            <td class="food-cell">
-              Athletic Full Body + Speed + Jump
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodSatDinner"
-            >
-              Rice + lean beef + vegetables
-            </td>
-
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodSatBed"
-            >
-              Milk + oats + peanut butter
-            </td>
-
-            <td
-              class="food-macro"
-              contenteditable="true"
-              data-edit="foodSatMacro"
-            >
-              ~2,700 kcal / P 140g
+            <td contenteditable="true">
+              ~2,700 / P140 / C350–370 / F70–80
             </td>
 
           </tr>
 
 
-          <!-- SUNDAY -->
+          <tr>
+
+            <td class="day-cell" contenteditable="true">WED</td>
+
+            <td contenteditable="true">
+              Oats + banana + peanut butter + milk
+            </td>
+
+            <td contenteditable="true">
+              Eggs + fruit + toast
+            </td>
+
+            <td contenteditable="true">
+              Rice + chicken + vegetables
+            </td>
+
+            <td contenteditable="true">
+              Banana + yogurt
+            </td>
+
+            <td contenteditable="true">
+              Back + Biceps
+            </td>
+
+            <td contenteditable="true">
+              Rice + fish + vegetables
+            </td>
+
+            <td contenteditable="true">
+              Milk + oats + fruit
+            </td>
+
+            <td contenteditable="true">
+              ~2,700 / P140 / C350–370 / F70–80
+            </td>
+
+          </tr>
+
 
           <tr>
 
-            <td class="meal-name">
-              Sunday
-            </td>
+            <td class="day-cell" contenteditable="true">THU</td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodSunBreakfast"
-            >
+            <td contenteditable="true">
               Eggs + toast + oats + fruit
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodSunSnack"
-            >
-              Yogurt + banana
+            <td contenteditable="true">
+              Yogurt + banana + nuts
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodSunLunch"
-            >
+            <td contenteditable="true">
+              Rice + beef/chicken + vegetables
+            </td>
+
+            <td contenteditable="true">
+              Banana + toast + coffee
+            </td>
+
+            <td contenteditable="true">
+              Shoulders + Neck + Core
+            </td>
+
+            <td contenteditable="true">
+              Rice + chicken/fish + vegetables
+            </td>
+
+            <td contenteditable="true">
+              Yogurt + oats
+            </td>
+
+            <td contenteditable="true">
+              ~2,700 / P140 / C350–370 / F70–80
+            </td>
+
+          </tr>
+
+
+          <tr>
+
+            <td class="day-cell" contenteditable="true">FRI</td>
+
+            <td contenteditable="true">
+              Oats + banana + milk + eggs
+            </td>
+
+            <td contenteditable="true">
+              Fruit + yogurt + nuts
+            </td>
+
+            <td contenteditable="true">
+              Rice + chicken + vegetables
+            </td>
+
+            <td contenteditable="true">
+              Banana + toast + yogurt
+            </td>
+
+            <td contenteditable="true">
+              Stamina + Basketball
+            </td>
+
+            <td contenteditable="true">
               Rice + fish/chicken + vegetables
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodSunPre"
-            >
-              Fruit + oats if hungry
+            <td contenteditable="true">
+              Milk + oats + fruit
             </td>
 
-            <td class="food-cell">
-              Recovery / Rest
+            <td contenteditable="true">
+              ~2,700 / P140 / C350–370 / F70–80
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodSunDinner"
-            >
-              Rice + chicken + vegetables + egg
+          </tr>
+
+
+          <tr>
+
+            <td class="day-cell" contenteditable="true">SAT</td>
+
+            <td contenteditable="true">
+              Oats + milk + banana + eggs + peanut butter
             </td>
 
-            <td
-              class="food-cell"
-              contenteditable="true"
-              data-edit="foodSunBed"
-            >
-              Milk + oats
+            <td contenteditable="true">
+              Yogurt + fruit + nuts
             </td>
 
-            <td
-              class="food-macro"
-              contenteditable="true"
-              data-edit="foodSunMacro"
-            >
-              ~2,600–2,700 kcal / P 140g
+            <td contenteditable="true">
+              Rice + chicken/beef + vegetables
+            </td>
+
+            <td contenteditable="true">
+              Banana + toast + coffee
+            </td>
+
+            <td contenteditable="true">
+              Athletic + Basketball
+            </td>
+
+            <td contenteditable="true">
+              Rice + fish/chicken + vegetables + avocado
+            </td>
+
+            <td contenteditable="true">
+              Yogurt + oats + fruit
+            </td>
+
+            <td contenteditable="true">
+              ~2,700 / P140 / C350–370 / F70–80
+            </td>
+
+          </tr>
+
+
+          <tr>
+
+            <td class="day-cell" contenteditable="true">SUN</td>
+
+            <td contenteditable="true">
+              Oats + milk + eggs + fruit
+            </td>
+
+            <td contenteditable="true">
+              Yogurt + banana + nuts
+            </td>
+
+            <td contenteditable="true">
+              Rice + chicken/fish + vegetables
+            </td>
+
+            <td contenteditable="true">
+              Fruit + toast
+            </td>
+
+            <td contenteditable="true">
+              Recovery / Light Walk
+            </td>
+
+            <td contenteditable="true">
+              Rice + lean protein + vegetables
+            </td>
+
+            <td contenteditable="true">
+              Milk/yogurt + oats
+            </td>
+
+            <td contenteditable="true">
+              ~2,700 / P140 / C350–370 / F70–80
             </td>
 
           </tr>
@@ -2219,356 +2669,477 @@ input[type="checkbox"]:checked::before{
 
     </div>
 
-
-    <div class="edit-hint">
-      Tip: Click any highlighted/editable food text to customize
-      portions or replace meals. Changes are saved automatically.
-    </div>
-
-  </article>
-
-
-  <!-- MACRO DETAILS -->
-
-  <article class="section-card">
-
-    <div class="section-header">
-
-      <div>
-        <p class="eyebrow">Daily Target</p>
-
-        <h2>
-          Macro & Hydration Guide
-        </h2>
-      </div>
-
-    </div>
-
-
-    <div class="table-scroll">
-
-      <table>
-
-        <thead>
-
-          <tr>
-            <th>Target</th>
-            <th>Daily Amount</th>
-            <th>Purpose</th>
-          </tr>
-
-        </thead>
-
-        <tbody>
-
-          <tr>
-            <td>Calories</td>
-
-            <td
-              contenteditable="true"
-              data-edit="macroTableCalories"
-            >
-              ~2,700 kcal
-            </td>
-
-            <td>
-              Lean-bulk energy target
-            </td>
-          </tr>
-
-          <tr>
-            <td>Protein</td>
-
-            <td
-              contenteditable="true"
-              data-edit="macroTableProtein"
-            >
-              140 g
-            </td>
-
-            <td>
-              Muscle recovery and growth
-            </td>
-          </tr>
-
-          <tr>
-            <td>Carbohydrates</td>
-
-            <td
-              contenteditable="true"
-              data-edit="macroTableCarbs"
-            >
-              350–370 g
-            </td>
-
-            <td>
-              Training and basketball fuel
-            </td>
-          </tr>
-
-          <tr>
-            <td>Fat</td>
-
-            <td
-              contenteditable="true"
-              data-edit="macroTableFat"
-            >
-              70–80 g
-            </td>
-
-            <td>
-              Energy and healthy-fat intake
-            </td>
-          </tr>
-
-          <tr>
-            <td>Water</td>
-
-            <td
-              contenteditable="true"
-              data-edit="macroTableWater"
-            >
-              2.5–3 L
-            </td>
-
-            <td>
-              Hydration and performance
-            </td>
-          </tr>
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </article>
+  </div>
 
 </section>
 
 
-<!-- ======================================================
+<!-- ==========================================================
      SHOPPING LIST
-====================================================== -->
+========================================================== -->
 
-<section class="panel" id="shopping">
+<section class="page" id="shopping">
 
-  <article class="section-card">
+  <div class="page-header">
 
-    <div class="section-header">
+    <div>
 
-      <div>
-        <p class="eyebrow">Weekly Grocery System</p>
-
-        <h2>
-          Shopping List
-        </h2>
-
-        <p>
-          Tick items as you buy them. Shopping data is saved locally.
-        </p>
+      <div class="eyebrow" contenteditable="true">
+        Weekly Grocery
       </div>
 
-      <button
-        class="secondary-btn"
-        id="resetShopping"
-      >
-        Reset Shopping
-      </button>
+      <h1 contenteditable="true">
+        Shopping List
+      </h1>
+
+      <p class="muted" contenteditable="true">
+        Protein · Carbs · Vegetables · Fruits · Healthy Fats · Oatside & Coffee
+      </p>
 
     </div>
 
-
-    <div class="shopping-grid" id="shoppingGrid"></div>
-
-
-    <div class="shopping-summary">
-
-      <strong id="shoppingProgress">
-        0 items checked
-      </strong>
-
-      <span>
-        Protein • Carbs • Vegetables • Fruits • Healthy Fats • Oatside & Coffee
-      </span>
-
-    </div>
-
-  </article>
+  </div>
 
 
-  <article class="section-card">
+  <div class="grid grid-2">
 
-    <div class="section-header">
 
-      <div>
-        <p class="eyebrow">Simple Rule</p>
+    <!-- PROTEIN -->
 
-        <h2>
-          Natural Lean Bulk Grocery System
-        </h2>
+    <div class="card">
+
+      <h3 contenteditable="true">
+        Protein
+      </h3>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Amount</th>
+              <th>Done</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td contenteditable="true">Chicken</td>
+              <td contenteditable="true">~1.5–2 kg</td>
+              <td class="check-cell">
+                <input class="shopping-check" type="checkbox">
+              </td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Fish</td>
+              <td contenteditable="true">~700 g–1 kg</td>
+              <td class="check-cell">
+                <input class="shopping-check" type="checkbox">
+              </td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Eggs</td>
+              <td contenteditable="true">18–24</td>
+              <td class="check-cell">
+                <input class="shopping-check" type="checkbox">
+              </td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Yogurt</td>
+              <td contenteditable="true">1–2 kg</td>
+              <td class="check-cell">
+                <input class="shopping-check" type="checkbox">
+              </td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Milk</td>
+              <td contenteditable="true">3–5 L</td>
+              <td class="check-cell">
+                <input class="shopping-check" type="checkbox">
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
       </div>
 
     </div>
 
 
-    <div class="table-scroll">
+    <!-- CARBS -->
 
-      <table>
+    <div class="card">
 
-        <thead>
+      <h3 contenteditable="true">
+        Carbohydrates
+      </h3>
 
-          <tr>
-            <th>Category</th>
-            <th>Weekly Focus</th>
-            <th>Easy Preparation</th>
-          </tr>
+      <div class="table-wrap">
 
-        </thead>
+        <table>
 
-        <tbody>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Amount</th>
+              <th>Done</th>
+            </tr>
+          </thead>
 
-          <tr>
-            <td>Protein</td>
-            <td contenteditable="true" data-edit="shopProteinFocus">
-              Chicken, eggs, fish, lean beef, Greek yogurt, milk
-            </td>
-            <td contenteditable="true" data-edit="shopProteinPrep">
-              Pan-fry, boil, air-fry or meal-prep
-            </td>
-          </tr>
+          <tbody>
 
-          <tr>
-            <td>Carbs</td>
-            <td contenteditable="true" data-edit="shopCarbFocus">
-              Rice, oats, bread, bananas, potatoes
-            </td>
-            <td contenteditable="true" data-edit="shopCarbPrep">
-              Cook rice in batches and keep oats ready
-            </td>
-          </tr>
+            <tr>
+              <td contenteditable="true">Rice</td>
+              <td contenteditable="true">Weekly supply</td>
+              <td class="check-cell">
+                <input class="shopping-check" type="checkbox">
+              </td>
+            </tr>
 
-          <tr>
-            <td>Vegetables</td>
-            <td contenteditable="true" data-edit="shopVegFocus">
-              Broccoli, carrots, spinach, mixed vegetables
-            </td>
-            <td contenteditable="true" data-edit="shopVegPrep">
-              Steam, stir-fry or use frozen vegetables
-            </td>
-          </tr>
+            <tr>
+              <td contenteditable="true">Oats</td>
+              <td contenteditable="true">~1 kg</td>
+              <td class="check-cell">
+                <input class="shopping-check" type="checkbox">
+              </td>
+            </tr>
 
-          <tr>
-            <td>Fruits</td>
-            <td contenteditable="true" data-edit="shopFruitFocus">
-              Bananas, apples, oranges
-            </td>
-            <td contenteditable="true" data-edit="shopFruitPrep">
-              Ready-to-eat snacks
-            </td>
-          </tr>
+            <tr>
+              <td contenteditable="true">Whole-Grain Bread</td>
+              <td contenteditable="true">2 loaves</td>
+              <td class="check-cell">
+                <input class="shopping-check" type="checkbox">
+              </td>
+            </tr>
 
-          <tr>
-            <td>Healthy Fats</td>
-            <td contenteditable="true" data-edit="shopFatFocus">
-              Peanut butter, nuts, avocado
-            </td>
-            <td contenteditable="true" data-edit="shopFatPrep">
-              Add to oats, toast or meals
-            </td>
-          </tr>
+            <tr>
+              <td contenteditable="true">Potatoes</td>
+              <td contenteditable="true">1–2 kg</td>
+              <td class="check-cell">
+                <input class="shopping-check" type="checkbox">
+              </td>
+            </tr>
 
-          <tr>
-            <td>Oatside & Coffee</td>
-            <td contenteditable="true" data-edit="shopDrinkFocus">
-              Oatside, coffee, water
-            </td>
-            <td contenteditable="true" data-edit="shopDrinkPrep">
-              Breakfast / pre-workout drink
-            </td>
-          </tr>
+            <tr>
+              <td contenteditable="true">Noodles / Pasta</td>
+              <td contenteditable="true">500 g–1 kg</td>
+              <td class="check-cell">
+                <input class="shopping-check" type="checkbox">
+              </td>
+            </tr>
 
-        </tbody>
+          </tbody>
 
-      </table>
+        </table>
+
+      </div>
 
     </div>
 
-  </article>
+
+    <!-- VEGETABLES -->
+
+    <div class="card">
+
+      <h3 contenteditable="true">
+        Vegetables
+      </h3>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Amount</th>
+              <th>Done</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td contenteditable="true">Broccoli</td>
+              <td contenteditable="true">Several servings</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Carrots</td>
+              <td contenteditable="true">Several servings</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Spinach / Leafy Greens</td>
+              <td contenteditable="true">Several servings</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Tomatoes</td>
+              <td contenteditable="true">Several servings</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Mixed Vegetables</td>
+              <td contenteditable="true">1–2 kg</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <!-- FRUITS -->
+
+    <div class="card">
+
+      <h3 contenteditable="true">
+        Fruits
+      </h3>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Amount</th>
+              <th>Done</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td contenteditable="true">Bananas</td>
+              <td contenteditable="true">10–14</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Apples</td>
+              <td contenteditable="true">5–7</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Oranges</td>
+              <td contenteditable="true">4–7</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Berries / Seasonal Fruit</td>
+              <td contenteditable="true">Several servings</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <!-- HEALTHY FATS -->
+
+    <div class="card">
+
+      <h3 contenteditable="true">
+        Healthy Fats
+      </h3>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Amount</th>
+              <th>Done</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td contenteditable="true">Peanut Butter</td>
+              <td contenteditable="true">1 jar</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Mixed Nuts</td>
+              <td contenteditable="true">300–500 g</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Avocado</td>
+              <td contenteditable="true">3–5</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Olive Oil</td>
+              <td contenteditable="true">1 bottle</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <!-- OATSIDE / COFFEE -->
+
+    <div class="card">
+
+      <h3 contenteditable="true">
+        Oatside & Coffee
+      </h3>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Amount</th>
+              <th>Done</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td contenteditable="true">Oatside / Oat Milk</td>
+              <td contenteditable="true">2–4 cartons</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Coffee Beans / Ground Coffee</td>
+              <td contenteditable="true">250–500 g</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+            <tr>
+              <td contenteditable="true">Milk</td>
+              <td contenteditable="true">As needed</td>
+              <td class="check-cell"><input class="shopping-check" type="checkbox"></td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- ======================================================
+<!-- ==========================================================
      31 DAY TRACKER
-====================================================== -->
+========================================================== -->
 
-<section class="panel" id="tracker">
+<section class="page" id="tracker">
 
-  <article class="section-card">
+  <div class="page-header">
 
-    <div class="tracker-header">
+    <div>
 
-      <div class="tracker-title">
-
-        <p class="eyebrow">Consistency System</p>
-
-        <h2>
-          31-Day Tracker
-        </h2>
-
-        <p>
-          Training • Study • Work • Recovery • Sleep • Done
-        </p>
-
+      <div class="eyebrow" contenteditable="true">
+        Consistency
       </div>
 
+      <h1 contenteditable="true">
+        31-Day Tracker
+      </h1>
 
-      <div class="progress-area">
+      <p class="muted" contenteditable="true">
+        Training · Study · Work · Recovery · Sleep · Done
+      </p>
 
-        <div class="progress-info">
+    </div>
 
-          <span>
-            Overall completion
-          </span>
-
-          <span id="progressText">
-            0%
-          </span>
-
-        </div>
-
-
-        <div class="progress-track">
-
-          <div
-            class="progress-fill"
-            id="progressFill"
-          ></div>
-
-        </div>
-
-      </div>
-
+    <div class="actions">
 
       <button
-        class="secondary-btn danger-btn"
-        id="resetTracker"
-      >
+        class="btn"
+        onclick="clearTracker()">
         Reset Tracker
       </button>
 
     </div>
 
+  </div>
 
-    <div class="table-scroll">
 
-      <table class="tracker">
+  <div class="card section">
+
+    <div class="progress-box">
+
+      <div class="progress-track">
+
+        <div
+          class="progress-bar"
+          id="progressBar">
+        </div>
+
+      </div>
+
+      <div
+        class="progress-text"
+        id="progressText">
+        0 / 31 days complete
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="table-wrap">
+
+      <table class="tracker-table">
 
         <thead>
 
           <tr>
-
             <th>Day</th>
             <th>Training</th>
             <th>Study</th>
@@ -2576,7 +3147,7 @@ input[type="checkbox"]:checked::before{
             <th>Recovery</th>
             <th>Sleep</th>
             <th>Done</th>
-
+            <th>Notes</th>
           </tr>
 
         </thead>
@@ -2587,185 +3158,433 @@ input[type="checkbox"]:checked::before{
 
     </div>
 
-  </article>
+  </div>
 
 </section>
 
 
-<!-- ======================================================
+<!-- ==========================================================
      RECOVERY
-====================================================== -->
+========================================================== -->
 
-<section class="panel" id="recovery">
+<section class="page" id="recovery">
 
-  <article class="section-card">
+  <div class="page-header">
 
-    <div class="section-header">
+    <div>
 
-      <div>
-
-        <p class="eyebrow">
-          Recovery System
-        </p>
-
-        <h2>
-          Daily Recovery Checklist
-        </h2>
-
-        <p>
-          Complete these small actions every day.
-        </p>
-
+      <div class="eyebrow" contenteditable="true">
+        Recovery
       </div>
 
+      <h1 contenteditable="true">
+        Recovery Checklist
+      </h1>
 
-      <button
-        class="secondary-btn danger-btn"
-        id="resetRecovery"
-      >
-        Reset Checklist
-      </button>
+      <p class="muted" contenteditable="true">
+        Daily recovery habits
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="grid grid-2">
+
+    <div class="card">
+
+      <h2 contenteditable="true">
+        Daily Recovery Checklist
+      </h2>
+
+      <div class="recovery-list">
+
+        <div class="recovery-item">
+          <input
+            class="recovery-check"
+            type="checkbox"
+            id="recovery1">
+          <label
+            for="recovery1"
+            contenteditable="true">
+            Sleep within planned sleep window
+          </label>
+        </div>
+
+        <div class="recovery-item">
+          <input
+            class="recovery-check"
+            type="checkbox"
+            id="recovery2">
+          <label
+            for="recovery2"
+            contenteditable="true">
+            Hydration throughout the day
+          </label>
+        </div>
+
+        <div class="recovery-item">
+          <input
+            class="recovery-check"
+            type="checkbox"
+            id="recovery3">
+          <label
+            for="recovery3"
+            contenteditable="true">
+            Regular balanced meals
+          </label>
+        </div>
+
+        <div class="recovery-item">
+          <input
+            class="recovery-check"
+            type="checkbox"
+            id="recovery4">
+          <label
+            for="recovery4"
+            contenteditable="true">
+            Mobility / stretching
+          </label>
+        </div>
+
+        <div class="recovery-item">
+          <input
+            class="recovery-check"
+            type="checkbox"
+            id="recovery5">
+          <label
+            for="recovery5"
+            contenteditable="true">
+            Training intensity matched recovery
+          </label>
+        </div>
+
+        <div class="recovery-item">
+          <input
+            class="recovery-check"
+            type="checkbox"
+            id="recovery6">
+          <label
+            for="recovery6"
+            contenteditable="true">
+            Study / screen breaks
+          </label>
+        </div>
+
+        <div class="recovery-item">
+          <input
+            class="recovery-check"
+            type="checkbox"
+            id="recovery7">
+          <label
+            for="recovery7"
+            contenteditable="true">
+            Easy movement / light walk when appropriate
+          </label>
+        </div>
+
+      </div>
 
     </div>
 
 
-    <div class="sleep-grid">
+    <div class="card">
 
-      <div class="sleep-card">
+      <h2 contenteditable="true">
+        Recovery Targets
+      </h2>
 
-        <span>Sleep Window</span>
+      <div class="table-wrap">
 
-        <strong
-          contenteditable="true"
-          data-edit="recoverySleepWindow"
-        >
-          11:30 PM → 7:30 AM
-        </strong>
+        <table>
 
-      </div>
+          <thead>
 
+            <tr>
+              <th>Area</th>
+              <th>Target</th>
+            </tr>
 
-      <div class="sleep-card">
+          </thead>
 
-        <span>Sleep Target</span>
+          <tbody>
 
-        <strong
-          contenteditable="true"
-          data-edit="recoverySleepTarget"
-        >
-          8 Hours
-        </strong>
+            <tr>
+              <td contenteditable="true">Sleep</td>
+              <td contenteditable="true">
+                11:30 PM – 7:30 AM
+              </td>
+            </tr>
 
-      </div>
+            <tr>
+              <td contenteditable="true">Water</td>
+              <td contenteditable="true">
+                2.5–3 L starting target
+              </td>
+            </tr>
 
+            <tr>
+              <td contenteditable="true">Mobility</td>
+              <td contenteditable="true">
+                5–15 min as needed
+              </td>
+            </tr>
 
-      <div class="sleep-card">
+            <tr>
+              <td contenteditable="true">Rest Day</td>
+              <td contenteditable="true">
+                Sunday
+              </td>
+            </tr>
 
-        <span>Water Target</span>
+            <tr>
+              <td contenteditable="true">Training Quality</td>
+              <td contenteditable="true">
+                Stop or modify when technique breaks down or pain occurs.
+              </td>
+            </tr>
 
-        <strong
-          contenteditable="true"
-          data-edit="recoveryWaterTarget"
-        >
-          2.5–3 L
-        </strong>
+          </tbody>
+
+        </table>
 
       </div>
 
     </div>
 
+  </div>
 
-    <div
-      class="checklist-grid"
-      id="recoveryList"
-    ></div>
 
-  </article>
+  <div class="card" style="margin-top:16px">
+
+    <h2 contenteditable="true">
+      Weekly Reflection
+    </h2>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Question</th>
+            <th>Your Notes</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td contenteditable="true">
+              How was my energy this week?
+            </td>
+
+            <td contenteditable="true">
+              Click to write...
+            </td>
+          </tr>
+
+          <tr>
+            <td contenteditable="true">
+              Which session felt strongest?
+            </td>
+
+            <td contenteditable="true">
+              Click to write...
+            </td>
+          </tr>
+
+          <tr>
+            <td contenteditable="true">
+              What should I improve next week?
+            </td>
+
+            <td contenteditable="true">
+              Click to write...
+            </td>
+          </tr>
+
+          <tr>
+            <td contenteditable="true">
+              Was recovery sufficient?
+            </td>
+
+            <td contenteditable="true">
+              Click to write...
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<footer class="footer">
+<!-- ==========================================================
+     FOOTER
+========================================================== -->
 
-  <div>
-    MELLO • 31-Day Performance Planner
-  </div>
+<div class="footer" contenteditable="true">
 
-  <div class="quote">
-    “Consistency over intensity.”
-  </div>
+  MELLO Personal Performance System · Local-first ·
+  Editable · LocalStorage
 
-</footer>
+</div>
 
 </main>
+</div>
+
+
+<!-- ==========================================================
+     DATA CONTROLS
+========================================================== -->
+
+<div
+  id="adminControls"
+  style="
+    position:fixed;
+    right:15px;
+    bottom:15px;
+    z-index:500;
+  "
+>
+
+  <div
+    style="
+      display:flex;
+      gap:5px;
+      padding:6px;
+      border:1px solid #e8e2db;
+      border-radius:10px;
+      background:rgba(250,248,245,.95);
+      backdrop-filter:blur(10px);
+    "
+  >
+
+    <button
+      class="btn"
+      style="font-size:10px;padding:6px 8px"
+      onclick="exportData()">
+      Export
+    </button>
+
+    <button
+      class="btn"
+      style="font-size:10px;padding:6px 8px"
+      onclick="importData()">
+      Import
+    </button>
+
+    <button
+      class="btn danger"
+      style="font-size:10px;padding:6px 8px"
+      onclick="resetAllData()">
+      Reset
+    </button>
+
+  </div>
+
+</div>
 
 
 <script>
 
-/* =========================================================
-   MELLO PERFORMANCE PLANNER
-   LocalStorage + Editable Content + Tracker
-========================================================= */
+/* ==========================================================
+   MELLO — APPLICATION STATE
+========================================================== */
 
-const STORAGE = {
+const STORAGE_KEY =
+  "mello_personal_performance_v2";
 
-  tracker:
-    "mello_31_day_tracker_v1",
+let appState = {
 
-  recovery:
-    "mello_recovery_v1",
+  activePage:"dashboard",
 
-  shopping:
-    "mello_shopping_v1",
+  editableContent:{},
 
-  edits:
-    "mello_manual_edits_v1"
+  tracker:{},
+
+  recovery:{},
+
+  shopping:{}
 
 };
 
 
-/* =========================================================
-   HELPER FUNCTIONS
-========================================================= */
+/* ==========================================================
+   LOAD
+========================================================== */
 
-function getStorage(key, fallback = {}){
+function loadState(){
 
   try{
 
-    const value =
-      localStorage.getItem(key);
+    const saved =
+      localStorage.getItem(STORAGE_KEY);
 
-    return value
-      ? JSON.parse(value)
-      : fallback;
+    if(saved){
+
+      const parsed =
+        JSON.parse(saved);
+
+      appState = {
+
+        ...appState,
+
+        ...parsed
+
+      };
+
+    }
 
   }catch(error){
 
     console.warn(
-      "Storage read error:",
+      "MELLO load error:",
       error
     );
-
-    return fallback;
 
   }
 
 }
 
 
-function setStorage(key,value){
+/* ==========================================================
+   SAVE
+========================================================== */
+
+function saveState(){
 
   try{
 
     localStorage.setItem(
-      key,
-      JSON.stringify(value)
+      STORAGE_KEY,
+      JSON.stringify(appState)
     );
+
+    const status =
+      document.getElementById("saveStatus");
+
+    if(status){
+
+      status.textContent =
+        "Saved locally · " +
+        new Date().toLocaleTimeString();
+
+    }
 
   }catch(error){
 
     console.warn(
-      "Storage write error:",
+      "MELLO save error:",
       error
     );
 
@@ -2774,723 +3593,229 @@ function setStorage(key,value){
 }
 
 
-/* =========================================================
-   TABS
-========================================================= */
+/* ==========================================================
+   NAVIGATION
+========================================================== */
 
-function initializeTabs(){
+function showPage(pageId){
 
-  const buttons =
-    document.querySelectorAll(
-      ".tab-btn"
-    );
+  document
+    .querySelectorAll(".page")
+    .forEach(page=>{
 
-  const panels =
-    document.querySelectorAll(
-      ".panel"
-    );
+      page.classList.remove("active");
+
+    });
 
 
-  buttons.forEach(button => {
+  const target =
+    document.getElementById(pageId);
+
+  if(target){
+
+    target.classList.add("active");
+
+  }
+
+
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(button=>{
+
+      button.classList.toggle(
+        "active",
+        button.dataset.page === pageId
+      );
+
+    });
+
+
+  appState.activePage =
+    pageId;
+
+  saveState();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* ==========================================================
+   DESKTOP NAV EVENTS
+========================================================== */
+
+document
+  .querySelectorAll(".nav-btn")
+  .forEach(button=>{
 
     button.addEventListener(
       "click",
-      () => {
+      ()=>{
 
-        buttons.forEach(btn =>
-          btn.classList.remove(
-            "active"
-          )
+        showPage(
+          button.dataset.page
         );
-
-        panels.forEach(panel =>
-          panel.classList.remove(
-            "active"
-          )
-        );
-
-
-        button.classList.add(
-          "active"
-        );
-
-
-        const target =
-          document.getElementById(
-            button.dataset.tab
-          );
-
-
-        if(target){
-
-          target.classList.add(
-            "active"
-          );
-
-        }
-
-        window.scrollTo({
-          top:0,
-          behavior:"smooth"
-        });
 
       }
     );
 
   });
 
+
+/* ==========================================================
+   EDITABLE CONTENT
+========================================================== */
+
+function createEditableKey(
+  element,
+  index
+){
+
+  if(element.dataset.editKey){
+
+    return element.dataset.editKey;
+
+  }
+
+
+  const tag =
+    element.tagName.toLowerCase();
+
+  const text =
+    element.innerText
+      .trim()
+      .slice(0,50)
+      .replace(/\s+/g,"_");
+
+
+  const key =
+    "editable_" +
+    index +
+    "_" +
+    tag +
+    "_" +
+    text;
+
+
+  element.dataset.editKey =
+    key;
+
+  return key;
+
 }
 
 
-/* =========================================================
-   MANUAL EDITING
-========================================================= */
-
-function initializeManualEditing(){
+function saveEditableContent(){
 
   const editable =
     document.querySelectorAll(
-      "[contenteditable='true'][data-edit]"
+      '[contenteditable="true"]'
     );
 
 
-  const saved =
-    getStorage(
-      STORAGE.edits,
-      {}
-    );
+  editable.forEach(
+    (element,index)=>{
 
-
-  editable.forEach(element => {
-
-    const key =
-      element.dataset.edit;
-
-
-    if(
-      Object.prototype.hasOwnProperty.call(
-        saved,
-        key
-      )
-    ){
-
-      element.innerHTML =
-        saved[key];
-
-    }
-
-
-    element.addEventListener(
-      "input",
-      () => {
-
-        const current =
-          getStorage(
-            STORAGE.edits,
-            {}
-          );
-
-
-        current[key] =
-          element.innerHTML;
-
-
-        setStorage(
-          STORAGE.edits,
-          current
+      const key =
+        createEditableKey(
+          element,
+          index
         );
 
-      }
-    );
+      appState
+        .editableContent[key] =
+          element.innerHTML;
+
+    }
+  );
 
 
-    element.addEventListener(
-      "keydown",
-      event => {
-
-        /*
-          Prevent accidental Enter-created
-          multi-line layout in most editable cells.
-        */
-
-        if(
-          event.key === "Enter" &&
-          element.tagName !== "DIV"
-        ){
-
-          event.preventDefault();
-
-          element.blur();
-
-        }
-
-      }
-    );
-
-  });
+  saveState();
 
 }
 
 
-/* =========================================================
-   DAILY SCHEDULE DATA
-========================================================= */
+function restoreEditableContent(){
 
-const schedules = {
+  const editable =
+    document.querySelectorAll(
+      '[contenteditable="true"]'
+    );
 
-Monday:{
 
-  focus:"Legs + Jump",
+  editable.forEach(
+    (element,index)=>{
 
-  rows:[
+      const key =
+        createEditableKey(
+          element,
+          index
+        );
 
-    ["6:30 AM","Wake Up","Personal"],
 
-    ["6:40 – 7:00 AM",
-     "Water + Morning Movement",
-     "Recovery"],
+      if(
+        Object.prototype.hasOwnProperty.call(
+          appState.editableContent,
+          key
+        )
+      ){
 
-    ["7:00 – 7:25 AM",
-     "Breakfast",
-     "Meal Time"],
+        element.innerHTML =
+          appState
+            .editableContent[key];
 
-    ["7:30 AM",
-     "Leave for University",
-     "University"],
+      }
 
-    ["8:30 – 11:20 AM",
-     "Business Statistics",
-     "University"],
-
-    ["11:45 AM – 12:15 PM",
-     "Lunch",
-     "Meal Time"],
-
-    ["12:30 – 2:30 PM",
-     "Video Editing / Work",
-     "Work"],
-
-    ["2:30 – 3:30 PM",
-     "Study / Personal Time",
-     "Study"],
-
-    ["3:30 – 4:00 PM",
-     "Pre-Workout Meal",
-     "Meal Time"],
-
-    ["4:00 – 5:30 PM",
-     "Legs + Jump Training",
-     "Training"],
-
-    ["5:30 – 6:00 PM",
-     "Cool Down + Shower",
-     "Recovery"],
-
-    ["6:00 – 7:00 PM",
-     "Dinner",
-     "Meal Time"],
-
-    ["7:00 – 9:00 PM",
-     "Creative Work / Editing",
-     "Work"],
-
-    ["9:00 – 10:00 PM",
-     "University Review",
-     "Study"],
-
-    ["10:00 – 11:00 PM",
-     "Stretching + Prepare Tomorrow",
-     "Recovery"],
-
-    ["11:00 – 11:30 PM",
-     "Wind Down",
-     "Recovery"],
-
-    ["11:30 PM",
-     "SLEEP",
-     "Sleep"]
-
-  ]
-
-},
-
-
-Tuesday:{
-
-  focus:"Chest + Triceps",
-
-  rows:[
-
-    ["7:30 AM","Wake Up","Personal"],
-
-    ["7:45 – 8:15 AM",
-     "Breakfast",
-     "Meal Time"],
-
-    ["8:30 – 10:30 AM",
-     "Video Editing / Work",
-     "Work"],
-
-    ["10:30 – 11:15 AM",
-     "Travel + University Preparation",
-     "University"],
-
-    ["11:30 AM – 2:20 PM",
-     "Business English for International Communication 2",
-     "University"],
-
-    ["2:30 – 3:00 PM",
-     "Lunch",
-     "Meal Time"],
-
-    ["3:15 – 4:45 PM",
-     "Chest + Triceps Training",
-     "Training"],
-
-    ["4:45 – 5:15 PM",
-     "Cool Down + Shower",
-     "Recovery"],
-
-    ["5:30 – 8:20 PM",
-     "Taxation",
-     "University"],
-
-    ["8:45 – 9:15 PM",
-     "Dinner",
-     "Meal Time"],
-
-    ["9:15 – 10:00 PM",
-     "University Review",
-     "Study"],
-
-    ["10:00 – 11:00 PM",
-     "Personal Time",
-     "Recovery"],
-
-    ["11:00 – 11:30 PM",
-     "Wind Down",
-     "Recovery"],
-
-    ["11:30 PM",
-     "SLEEP",
-     "Sleep"]
-
-  ]
-
-},
-
-
-Wednesday:{
-
-  focus:"Back + Biceps",
-
-  rows:[
-
-    ["7:30 AM","Wake Up","Personal"],
-
-    ["7:45 – 8:15 AM",
-     "Breakfast",
-     "Meal Time"],
-
-    ["8:30 – 10:30 AM",
-     "Video Editing / Work",
-     "Work"],
-
-    ["10:30 – 11:00 AM",
-     "Break",
-     "Recovery"],
-
-    ["11:00 AM – 12:00 PM",
-     "Study",
-     "Study"],
-
-    ["12:00 – 12:30 PM",
-     "Lunch",
-     "Meal Time"],
-
-    ["12:30 – 3:00 PM",
-     "Creative Work",
-     "Work"],
-
-    ["3:00 – 3:30 PM",
-     "Pre-Workout Meal",
-     "Meal Time"],
-
-    ["4:00 – 5:30 PM",
-     "Back + Biceps Training",
-     "Training"],
-
-    ["5:30 – 6:00 PM",
-     "Cool Down + Shower",
-     "Recovery"],
-
-    ["6:00 – 7:00 PM",
-     "Basketball Skills / Shooting",
-     "Basketball"],
-
-    ["7:00 – 7:30 PM",
-     "Dinner",
-     "Meal Time"],
-
-    ["7:30 – 9:00 PM",
-     "Creative Work",
-     "Work"],
-
-    ["9:00 – 10:30 PM",
-     "Study",
-     "Study"],
-
-    ["10:30 – 11:30 PM",
-     "Wind Down",
-     "Recovery"],
-
-    ["11:30 PM",
-     "SLEEP",
-     "Sleep"]
-
-  ]
-
-},
-
-
-Thursday:{
-
-  focus:"Shoulders + Neck + Core",
-
-  rows:[
-
-    ["7:30 AM","Wake Up","Personal"],
-
-    ["7:45 – 8:15 AM",
-     "Breakfast",
-     "Meal Time"],
-
-    ["8:30 – 10:00 AM",
-     "Video Editing / Work",
-     "Work"],
-
-    ["10:00 – 11:00 AM",
-     "Travel + University Preparation",
-     "University"],
-
-    ["11:30 AM – 2:20 PM",
-     "Macroeconomics",
-     "University"],
-
-    ["2:30 – 5:20 PM",
-     "Digital Innovative Thinking for Business",
-     "University"],
-
-    ["5:30 – 6:00 PM",
-     "Pre-Workout Meal",
-     "Meal Time"],
-
-    ["6:00 – 7:30 PM",
-     "Shoulders + Neck + Core",
-     "Training"],
-
-    ["7:30 – 8:00 PM",
-     "Shower + Recovery",
-     "Recovery"],
-
-    ["8:00 – 8:30 PM",
-     "Dinner",
-     "Meal Time"],
-
-    ["8:30 – 9:30 PM",
-     "University Work / Editing",
-     "Study"],
-
-    ["9:30 – 10:30 PM",
-     "Personal Time",
-     "Personal"],
-
-    ["10:30 – 11:30 PM",
-     "Wind Down",
-     "Recovery"],
-
-    ["11:30 PM",
-     "SLEEP",
-     "Sleep"]
-
-  ]
-
-},
-
-
-Friday:{
-
-  focus:"Stamina + Basketball",
-
-  rows:[
-
-    ["7:30 AM","Wake Up","Personal"],
-
-    ["7:45 – 8:15 AM",
-     "Breakfast",
-     "Meal Time"],
-
-    ["8:30 – 10:30 AM",
-     "Video Editing / Work",
-     "Work"],
-
-    ["10:30 – 11:00 AM",
-     "Break",
-     "Recovery"],
-
-    ["11:00 AM – 12:00 PM",
-     "Study",
-     "Study"],
-
-    ["12:00 – 12:30 PM",
-     "Lunch",
-     "Meal Time"],
-
-    ["12:30 – 3:00 PM",
-     "Creative Work",
-     "Work"],
-
-    ["3:00 – 3:30 PM",
-     "Pre-Workout Meal",
-     "Meal Time"],
-
-    ["4:00 – 5:00 PM",
-     "Stamina Training",
-     "Training"],
-
-    ["5:00 – 6:30 PM",
-     "Basketball Training / Game",
-     "Basketball"],
-
-    ["6:30 – 7:00 PM",
-     "Cool Down + Shower",
-     "Recovery"],
-
-    ["7:00 – 7:30 PM",
-     "Dinner",
-     "Meal Time"],
-
-    ["7:30 – 9:00 PM",
-     "Creative Work / Free Time",
-     "Work"],
-
-    ["9:00 – 10:30 PM",
-     "Personal Time",
-     "Personal"],
-
-    ["10:30 – 11:30 PM",
-     "Wind Down",
-     "Recovery"],
-
-    ["11:30 PM",
-     "SLEEP",
-     "Sleep"]
-
-  ]
-
-},
-
-
-Saturday:{
-
-  focus:"Athletic Full Body",
-
-  rows:[
-
-    ["7:30 AM","Wake Up","Personal"],
-
-    ["7:45 – 8:15 AM",
-     "Breakfast",
-     "Meal Time"],
-
-    ["8:30 – 10:30 AM",
-     "Creative Work",
-     "Work"],
-
-    ["10:30 – 11:00 AM",
-     "Break",
-     "Recovery"],
-
-    ["11:00 AM – 12:00 PM",
-     "Study",
-     "Study"],
-
-    ["12:00 – 12:30 PM",
-     "Lunch",
-     "Meal Time"],
-
-    ["12:30 – 3:00 PM",
-     "Video Editing",
-     "Work"],
-
-    ["3:00 – 3:30 PM",
-     "Pre-Workout Meal",
-     "Meal Time"],
-
-    ["4:00 – 5:30 PM",
-     "Athletic Full Body",
-     "Training"],
-
-    ["5:30 – 6:00 PM",
-     "Speed + Jump Training",
-     "Training"],
-
-    ["6:00 – 7:00 PM",
-     "Basketball Skills / Shooting",
-     "Basketball"],
-
-    ["7:00 – 7:30 PM",
-     "Dinner",
-     "Meal Time"],
-
-    ["7:30 – 9:00 PM",
-     "Creative Work / Free Time",
-     "Work"],
-
-    ["9:00 – 10:30 PM",
-     "Personal Time",
-     "Personal"],
-
-    ["10:30 – 11:30 PM",
-     "Wind Down",
-     "Recovery"],
-
-    ["11:30 PM",
-     "SLEEP",
-     "Sleep"]
-
-  ]
-
-},
-
-
-Sunday:{
-
-  focus:"Recovery / Rest Day",
-
-  rows:[
-
-    ["7:30 AM","Wake Up","Personal"],
-
-    ["7:45 – 8:15 AM",
-     "Breakfast",
-     "Meal Time"],
-
-    ["8:30 – 9:30 AM",
-     "Light Walk + Mobility",
-     "Recovery"],
-
-    ["9:30 – 11:00 AM",
-     "Personal Time",
-     "Personal"],
-
-    ["11:00 AM – 12:00 PM",
-     "Weekly Planning",
-     "Study"],
-
-    ["12:00 – 12:30 PM",
-     "Lunch",
-     "Meal Time"],
-
-    ["12:30 – 2:30 PM",
-     "Light Creative Work",
-     "Work"],
-
-    ["2:30 – 4:00 PM",
-     "Rest",
-     "Recovery"],
-
-    ["4:00 – 5:00 PM",
-     "Stretching + Mobility",
-     "Recovery"],
-
-    ["5:00 – 6:30 PM",
-     "Hobby / Personal Time",
-     "Personal"],
-
-    ["6:30 – 7:00 PM",
-     "Dinner",
-     "Meal Time"],
-
-    ["7:00 – 9:00 PM",
-     "Prepare for Next Week",
-     "Study"],
-
-    ["9:00 – 10:30 PM",
-     "Relax",
-     "Personal"],
-
-    ["10:30 – 11:30 PM",
-     "Wind Down",
-     "Recovery"],
-
-    ["11:30 PM",
-     "SLEEP",
-     "Sleep"]
-
-  ]
+    }
+  );
 
 }
 
-};
+
+function debounce(
+  fn,
+  delay
+){
+
+  let timer;
+
+  return function(){
+
+    clearTimeout(timer);
+
+    timer =
+      setTimeout(
+        fn,
+        delay
+      );
+
+  };
+
+}
 
 
-let selectedDay = "Monday";
+function setupEditable(){
 
-
-/* =========================================================
-   DAILY SCHEDULE RENDER
-========================================================= */
-
-function renderDaySwitcher(){
-
-  const root =
-    document.getElementById(
-      "daySwitcher"
-    );
-
-
-  const days =
-    Object.keys(
-      schedules
-    );
-
-
-  root.innerHTML =
-    days.map(day => `
-
-      <button
-        class="day-btn ${
-          selectedDay === day
-          ? "active"
-          : ""
-        }"
-        data-day="${day}"
-      >
-        ${day}
-      </button>
-
-    `).join("");
-
-
-  root
+  document
     .querySelectorAll(
-      ".day-btn"
+      '[contenteditable="true"]'
     )
-    .forEach(button => {
+    .forEach(element=>{
 
-      button.addEventListener(
-        "click",
-        () => {
+      element.addEventListener(
+        "input",
+        debounce(
+          saveEditableContent,
+          450
+        )
+      );
 
-          selectedDay =
-            button.dataset.day;
-
-          renderDaySwitcher();
-
-          renderDailySchedule();
-
-        }
+      element.addEventListener(
+        "blur",
+        saveEditableContent
       );
 
     });
@@ -3498,197 +3823,18 @@ function renderDaySwitcher(){
 }
 
 
-function renderDailySchedule(){
-
-  const schedule =
-    schedules[selectedDay];
-
-
-  const root =
-    document.getElementById(
-      "scheduleView"
-    );
-
-
-  root.innerHTML = `
-
-    <div class="schedule-top">
-
-      <div>
-
-        <h3
-          contenteditable="true"
-          data-dynamic-edit="schedule-${selectedDay}-title"
-        >
-          ${selectedDay}
-        </h3>
-
-        <p
-          class="schedule-focus"
-          contenteditable="true"
-          data-dynamic-edit="schedule-${selectedDay}-focus"
-        >
-          ${schedule.focus}
-        </p>
-
-      </div>
-
-      <span class="schedule-range">
-        ${schedule.rows[0][0]} → 11:30 PM
-      </span>
-
-    </div>
-
-
-    <div class="timeline">
-
-      ${schedule.rows.map(
-        (row,index) => `
-
-          <div class="timeline-row">
-
-            <div
-              class="time"
-              contenteditable="true"
-              data-dynamic-edit="schedule-${selectedDay}-${index}-time"
-            >
-              ${row[0]}
-            </div>
-
-
-            <div class="activity-card">
-
-              <div
-                class="activity-name"
-                contenteditable="true"
-                data-dynamic-edit="schedule-${selectedDay}-${index}-activity"
-              >
-                ${row[1]}
-              </div>
-
-              <span
-                class="category-tag"
-                contenteditable="true"
-                data-dynamic-edit="schedule-${selectedDay}-${index}-category"
-              >
-                ${row[2]}
-              </span>
-
-            </div>
-
-          </div>
-
-        `
-      ).join("")}
-
-    </div>
-
-    <div class="edit-hint">
-      Click any time, activity, category or training title to edit.
-      Changes are saved automatically.
-    </div>
-
-  `;
-
-
-  initializeDynamicEditing();
-
-}
-
-
-/* =========================================================
-   DYNAMIC EDITING
-========================================================= */
-
-function initializeDynamicEditing(){
-
-  const elements =
-    document.querySelectorAll(
-      "[contenteditable='true'][data-dynamic-edit]"
-    );
-
-
-  const saved =
-    getStorage(
-      STORAGE.edits,
-      {}
-    );
-
-
-  elements.forEach(element => {
-
-    const key =
-      element.dataset.dynamicEdit;
-
-
-    if(
-      Object.prototype.hasOwnProperty.call(
-        saved,
-        key
-      )
-    ){
-
-      element.innerHTML =
-        saved[key];
-
-    }
-
-
-    element.addEventListener(
-      "input",
-      () => {
-
-        const current =
-          getStorage(
-            STORAGE.edits,
-            {}
-          );
-
-
-        current[key] =
-          element.innerHTML;
-
-
-        setStorage(
-          STORAGE.edits,
-          current
-        );
-
-      }
-    );
-
-  });
-
-}
-
-
-/* =========================================================
+/* ==========================================================
    31 DAY TRACKER
-========================================================= */
+========================================================== */
 
-const trackerColumns = [
-  "training",
-  "study",
-  "work",
-  "recovery",
-  "sleep",
-  "done"
-];
-
-
-function renderTracker(){
-
-  const state =
-    getStorage(
-      STORAGE.tracker,
-      {}
-    );
-
+function buildTracker(){
 
   const body =
     document.getElementById(
       "trackerBody"
     );
+
+  if(!body) return;
 
 
   body.innerHTML = "";
@@ -3700,129 +3846,193 @@ function renderTracker(){
     day++
   ){
 
+    if(!appState.tracker[day]){
+
+      appState.tracker[day] = {
+
+        training:false,
+        study:false,
+        work:false,
+        recovery:false,
+        sleep:false,
+        done:false,
+        notes:""
+
+      };
+
+    }
+
+
+    const data =
+      appState.tracker[day];
+
+
     const row =
-      document.createElement(
-        "tr"
-      );
+      document.createElement("tr");
 
 
-    const dayCell =
-      document.createElement(
-        "td"
-      );
+    row.innerHTML = `
+
+      <td class="day-number">
+        Day ${String(day).padStart(2,"0")}
+      </td>
+
+      <td class="check-cell">
+        <input
+          class="checkbox tracker-check"
+          type="checkbox"
+          data-day="${day}"
+          data-field="training"
+          ${data.training ? "checked" : ""}
+        >
+      </td>
+
+      <td class="check-cell">
+        <input
+          class="checkbox tracker-check"
+          type="checkbox"
+          data-day="${day}"
+          data-field="study"
+          ${data.study ? "checked" : ""}
+        >
+      </td>
+
+      <td class="check-cell">
+        <input
+          class="checkbox tracker-check"
+          type="checkbox"
+          data-day="${day}"
+          data-field="work"
+          ${data.work ? "checked" : ""}
+        >
+      </td>
+
+      <td class="check-cell">
+        <input
+          class="checkbox tracker-check"
+          type="checkbox"
+          data-day="${day}"
+          data-field="recovery"
+          ${data.recovery ? "checked" : ""}
+        >
+      </td>
+
+      <td class="check-cell">
+        <input
+          class="checkbox tracker-check"
+          type="checkbox"
+          data-day="${day}"
+          data-field="sleep"
+          ${data.sleep ? "checked" : ""}
+        >
+      </td>
+
+      <td class="check-cell">
+        <input
+          class="checkbox tracker-check"
+          type="checkbox"
+          data-day="${day}"
+          data-field="done"
+          ${data.done ? "checked" : ""}
+        >
+      </td>
+
+      <td
+        class="tracker-note"
+        contenteditable="true"
+        data-day="${day}"
+      >${escapeHTML(data.notes || "")}</td>
+
+    `;
 
 
-    dayCell.textContent =
-      `Day ${String(day).padStart(2,"0")}`;
-
-
-    row.appendChild(
-      dayCell
-    );
-
-
-    trackerColumns.forEach(
-      column => {
-
-        const cell =
-          document.createElement(
-            "td"
-          );
-
-
-        const checkbox =
-          document.createElement(
-            "input"
-          );
-
-
-        checkbox.type =
-          "checkbox";
-
-
-        const key =
-          `${day}-${column}`;
-
-
-        checkbox.checked =
-          Boolean(
-            state[key]
-          );
-
-
-        checkbox.setAttribute(
-          "aria-label",
-          `Day ${day} ${column}`
-        );
-
-
-        checkbox.addEventListener(
-          "change",
-          () => {
-
-            const current =
-              getStorage(
-                STORAGE.tracker,
-                {}
-              );
-
-
-            current[key] =
-              checkbox.checked;
-
-
-            setStorage(
-              STORAGE.tracker,
-              current
-            );
-
-
-            updateTracker();
-
-          }
-        );
-
-
-        cell.appendChild(
-          checkbox
-        );
-
-
-        row.appendChild(
-          cell
-        );
-
-      }
-    );
-
-
-    body.appendChild(
-      row
-    );
+    body.appendChild(row);
 
   }
 
 
-  updateTracker();
+  attachTrackerEvents();
+
+  updateTrackerProgress();
 
 }
 
 
-function updateTracker(){
+/* ==========================================================
+   TRACKER EVENTS
+========================================================== */
 
-  const state =
-    getStorage(
-      STORAGE.tracker,
-      {}
-    );
+function attachTrackerEvents(){
+
+  document
+    .querySelectorAll(
+      ".tracker-check"
+    )
+    .forEach(input=>{
+
+      input.addEventListener(
+        "change",
+        ()=>{
+
+          const day =
+            input.dataset.day;
+
+          const field =
+            input.dataset.field;
 
 
-  let completed =
-    0;
+          appState
+            .tracker[day][field] =
+              input.checked;
 
 
-  const total =
-    31 * trackerColumns.length;
+          saveState();
+
+          updateTrackerProgress();
+
+        }
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      ".tracker-note"
+    )
+    .forEach(note=>{
+
+      note.addEventListener(
+        "input",
+        ()=>{
+
+          const day =
+            note.dataset.day;
+
+
+          appState
+            .tracker[day]
+            .notes =
+              note.innerText;
+
+
+          saveState();
+
+        }
+      );
+
+    });
+
+}
+
+
+/* ==========================================================
+   TRACKER PROGRESS
+========================================================== */
+
+function updateTrackerProgress(){
+
+  let complete = 0;
 
 
   for(
@@ -3831,239 +4041,123 @@ function updateTracker(){
     day++
   ){
 
-    trackerColumns.forEach(
-      column => {
+    if(
+      appState.tracker[day] &&
+      appState.tracker[day].done
+    ){
 
-        if(
-          state[
-            `${day}-${column}`
-          ]
-        ){
+      complete++;
 
-          completed++;
-
-        }
-
-      }
-    );
+    }
 
   }
 
 
   const percentage =
-    Math.round(
-      (
-        completed /
-        total
-      ) * 100
+    (complete / 31) * 100;
+
+
+  const bar =
+    document.getElementById(
+      "progressBar"
     );
 
 
-  document.getElementById(
-    "progressText"
-  ).textContent =
-    `${percentage}%`;
-
-
-  document.getElementById(
-    "progressFill"
-  ).style.width =
-    `${percentage}%`;
-
-
-  const rows =
-    document.querySelectorAll(
-      "#trackerBody tr"
+  const text =
+    document.getElementById(
+      "progressText"
     );
 
 
-  rows.forEach(row => {
+  if(bar){
 
-    const checks =
-      row.querySelectorAll(
-        "input[type='checkbox']"
-      );
+    bar.style.width =
+      percentage + "%";
 
-
-    const done =
-      checks[checks.length-1];
+  }
 
 
-    row.classList.toggle(
-      "completed-row",
-      done.checked
-    );
+  if(text){
 
-  });
+    text.textContent =
+      `${complete} / 31 days complete`;
+
+  }
 
 }
 
 
-/* =========================================================
-   RESET TRACKER
-========================================================= */
+/* ==========================================================
+   RECOVERY
+========================================================== */
 
-document.getElementById(
-  "resetTracker"
-).addEventListener(
-  "click",
-  () => {
+function setupRecovery(){
 
-    if(
-      !confirm(
-        "Reset all 31 days?"
-      )
-    ){
+  document
+    .querySelectorAll(
+      ".recovery-check"
+    )
+    .forEach(input=>{
 
-      return;
-
-    }
+      const key =
+        input.id;
 
 
-    localStorage.removeItem(
-      STORAGE.tracker
-    );
+      input.checked =
+        !!appState.recovery[key];
 
 
-    renderTracker();
-
-  }
-);
-
-
-/* =========================================================
-   RECOVERY CHECKLIST
-========================================================= */
-
-const recoveryItems = [
-
-  "Sleep on time",
-
-  "Morning movement",
-
-  "Training completed",
-
-  "Stretching / mobility",
-
-  "Study completed",
-
-  "Work completed",
-
-  "Prepare for tomorrow"
-
-];
-
-
-function renderRecovery(){
-
-  const state =
-    getStorage(
-      STORAGE.recovery,
-      {}
-    );
-
-
-  const root =
-    document.getElementById(
-      "recoveryList"
-    );
-
-
-  root.innerHTML = "";
-
-
-  recoveryItems.forEach(
-    (item,index) => {
-
-      const label =
-        document.createElement(
-          "label"
-        );
-
-
-      label.className =
-        "check-item";
-
-
-      const checkbox =
-        document.createElement(
-          "input"
-        );
-
-
-      checkbox.type =
-        "checkbox";
-
-
-      checkbox.checked =
-        Boolean(
-          state[index]
-        );
-
-
-      if(
-        checkbox.checked
-      ){
-
-        label.classList.add(
-          "checked"
-        );
-
-      }
-
-
-      checkbox.addEventListener(
+      input.addEventListener(
         "change",
-        () => {
+        ()=>{
 
-          const current =
-            getStorage(
-              STORAGE.recovery,
-              {}
-            );
+          appState.recovery[key] =
+            input.checked;
 
-
-          current[index] =
-            checkbox.checked;
-
-
-          setStorage(
-            STORAGE.recovery,
-            current
-          );
-
-
-          label.classList.toggle(
-            "checked",
-            checkbox.checked
-          );
+          saveState();
 
         }
       );
 
+    });
 
-      const text =
-        document.createElement(
-          "span"
-        );
+}
 
 
-      text.textContent =
-        item;
+/* ==========================================================
+   SHOPPING
+========================================================== */
+
+function setupShopping(){
+
+  const checks =
+    document.querySelectorAll(
+      ".shopping-check"
+    );
 
 
-      label.appendChild(
-        checkbox
-      );
+  checks.forEach(
+    (input,index)=>{
+
+      const key =
+        "shopping_" +
+        index;
 
 
-      label.appendChild(
-        text
-      );
+      input.checked =
+        !!appState.shopping[key];
 
 
-      root.appendChild(
-        label
+      input.addEventListener(
+        "change",
+        ()=>{
+
+          appState.shopping[key] =
+            input.checked;
+
+          saveState();
+
+        }
       );
 
     }
@@ -4072,400 +4166,293 @@ function renderRecovery(){
 }
 
 
-document.getElementById(
-  "resetRecovery"
-).addEventListener(
-  "click",
-  () => {
+/* ==========================================================
+   HTML ESCAPE
+========================================================== */
 
-    if(
-      !confirm(
-        "Reset the recovery checklist?"
-      )
-    ){
+function escapeHTML(value){
 
-      return;
+  return String(value)
 
-    }
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
 
 
-    localStorage.removeItem(
-      STORAGE.recovery
+/* ==========================================================
+   RESET TRACKER
+========================================================== */
+
+function clearTracker(){
+
+  const ok =
+    confirm(
+      "Reset all 31 tracker days?"
     );
 
 
-    renderRecovery();
-
-  }
-);
+  if(!ok) return;
 
 
-/* =========================================================
-   SHOPPING LIST
-========================================================= */
-
-const shoppingData = {
-
-  "Protein":[
-    "Chicken breast — 1.5–2 kg",
-    "Eggs — 18–24 eggs",
-    "Fish — 1–1.5 kg",
-    "Lean beef — 500–750 g",
-    "Greek yogurt — 1 kg",
-    "Milk — 2–3 L"
-  ],
-
-  "Carbs":[
-    "Rice — 3–5 kg",
-    "Oats — 1 kg",
-    "Whole-grain bread — 2 loaves",
-    "Bananas — 10–14",
-    "Potatoes — 1–2 kg"
-  ],
-
-  "Vegetables":[
-    "Broccoli — 2–3 heads",
-    "Carrots — 1 kg",
-    "Spinach — 2 packs",
-    "Mixed vegetables — 1–2 kg",
-    "Tomatoes — 6–8",
-    "Onions — 4–6"
-  ],
-
-  "Fruits":[
-    "Bananas — 10–14",
-    "Apples — 5–7",
-    "Oranges — 4–6"
-  ],
-
-  "Healthy Fats":[
-    "Peanut butter — 1 jar",
-    "Mixed nuts — 300–500 g",
-    "Avocado — 2–3",
-    "Olive oil — 1 bottle"
-  ],
-
-  "Oatside & Coffee":[
-    "Oatside — 2–3 cartons",
-    "Coffee — 1 pack",
-    "Drinking water — enough for 2.5–3 L/day"
-  ]
-
-};
+  appState.tracker = {};
 
 
-function renderShopping(){
+  buildTracker();
 
-  const state =
-    getStorage(
-      STORAGE.shopping,
-      {}
+  saveState();
+
+}
+
+
+/* ==========================================================
+   EXPORT
+========================================================== */
+
+function exportData(){
+
+  saveEditableContent();
+
+
+  const blob =
+    new Blob(
+      [
+        JSON.stringify(
+          appState,
+          null,
+          2
+        )
+      ],
+      {
+        type:"application/json"
+      }
     );
 
 
-  const root =
-    document.getElementById(
-      "shoppingGrid"
-    );
+  const url =
+    URL.createObjectURL(blob);
 
 
-  root.innerHTML = "";
+  const link =
+    document.createElement("a");
 
 
-  let itemIndex =
-    0;
+  link.href =
+    url;
+
+  link.download =
+    "mello-performance-data.json";
 
 
-  Object.entries(
-    shoppingData
-  ).forEach(
-    ([category,items]) => {
-
-      const card =
-        document.createElement(
-          "div"
-        );
+  document.body.appendChild(
+    link
+  );
 
 
-      card.className =
-        "shop-category";
+  link.click();
+
+  link.remove();
 
 
-      const heading =
-        document.createElement(
-          "h3"
-        );
+  URL.revokeObjectURL(
+    url
+  );
+
+}
 
 
-      heading.textContent =
-        category;
+/* ==========================================================
+   IMPORT
+========================================================== */
+
+function importData(){
+
+  const input =
+    document.createElement("input");
 
 
-      card.appendChild(
-        heading
-      );
+  input.type =
+    "file";
+
+  input.accept =
+    ".json,application/json";
 
 
-      const list =
-        document.createElement(
-          "div"
-        );
+  input.addEventListener(
+    "change",
+    event=>{
+
+      const file =
+        event.target.files[0];
 
 
-      list.className =
-        "shop-list";
+      if(!file) return;
 
 
-      items.forEach(item => {
-
-        const key =
-          `shopping-${itemIndex}`;
+      const reader =
+        new FileReader();
 
 
-        const label =
-          document.createElement(
-            "label"
-          );
+      reader.onload =
+        function(){
 
+          try{
 
-        label.className =
-          "shop-item";
-
-
-        const checkbox =
-          document.createElement(
-            "input"
-          );
-
-
-        checkbox.type =
-          "checkbox";
-
-
-        checkbox.checked =
-          Boolean(
-            state[key]
-          );
-
-
-        if(
-          checkbox.checked
-        ){
-
-          label.classList.add(
-            "checked"
-          );
-
-        }
-
-
-        checkbox.addEventListener(
-          "change",
-          () => {
-
-            const current =
-              getStorage(
-                STORAGE.shopping,
-                {}
+            const imported =
+              JSON.parse(
+                reader.result
               );
 
 
-            current[key] =
-              checkbox.checked;
+            appState = {
+
+              ...appState,
+
+              ...imported
+
+            };
 
 
-            setStorage(
-              STORAGE.shopping,
-              current
+            saveState();
+
+            location.reload();
+
+          }catch(error){
+
+            alert(
+              "Invalid MELLO JSON file."
             );
-
-
-            label.classList.toggle(
-              "checked",
-              checkbox.checked
-            );
-
-
-            updateShoppingProgress();
 
           }
-        );
+
+        };
 
 
-        const text =
-          document.createElement(
-            "span"
-          );
-
-
-        text.textContent =
-          item;
-
-
-        label.appendChild(
-          checkbox
-        );
-
-
-        label.appendChild(
-          text
-        );
-
-
-        list.appendChild(
-          label
-        );
-
-
-        itemIndex++;
-
-      });
-
-
-      card.appendChild(
-        list
-      );
-
-
-      root.appendChild(
-        card
+      reader.readAsText(
+        file
       );
 
     }
   );
 
 
-  updateShoppingProgress();
+  input.click();
 
 }
 
 
-function updateShoppingProgress(){
+/* ==========================================================
+   RESET ALL
+========================================================== */
 
-  const state =
-    getStorage(
-      STORAGE.shopping,
-      {}
+function resetAllData(){
+
+  const ok =
+    confirm(
+      "Reset ALL MELLO saved data?"
     );
 
 
-  let total =
-    0;
+  if(!ok) return;
 
-  let checked =
-    0;
-
-
-  Object.values(
-    shoppingData
-  ).forEach(items => {
-
-    total += items.length;
-
-  });
-
-
-  for(
-    const value of Object.values(state)
-  ){
-
-    if(value){
-
-      checked++;
-
-    }
-
-  }
-
-
-  document.getElementById(
-    "shoppingProgress"
-  ).textContent =
-    `${checked} / ${total} items checked`;
-
-}
-
-
-document.getElementById(
-  "resetShopping"
-).addEventListener(
-  "click",
-  () => {
-
-    if(
-      !confirm(
-        "Reset the shopping list?"
-      )
-    ){
-
-      return;
-
-    }
-
-
-    localStorage.removeItem(
-      STORAGE.shopping
-    );
-
-
-    renderShopping();
-
-  }
-);
-
-
-/* =========================================================
-   RESET ALL MANUAL EDITS
-=========================================================
-
-   This function is intentionally available from browser
-   console if needed:
-
-   resetManualEdits();
-
-========================================================= */
-
-function resetManualEdits(){
 
   localStorage.removeItem(
-    STORAGE.edits
+    STORAGE_KEY
   );
+
 
   location.reload();
 
 }
 
 
-/* =========================================================
+/* ==========================================================
+   KEYBOARD SAVE
+========================================================== */
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(
+      (event.ctrlKey || event.metaKey) &&
+      event.key.toLowerCase() === "s"
+    ){
+
+      event.preventDefault();
+
+      saveEditableContent();
+
+    }
+
+  }
+);
+
+
+/* ==========================================================
    INITIALIZE
-========================================================= */
+========================================================== */
 
-function initializeApp(){
+function init(){
 
-  initializeTabs();
+  loadState();
 
-  initializeManualEditing();
+  buildTracker();
 
-  renderDaySwitcher();
+  restoreEditableContent();
 
-  renderDailySchedule();
+  setupEditable();
 
-  renderTracker();
+  setupRecovery();
 
-  renderRecovery();
+  setupShopping();
 
-  renderShopping();
+  if(
+    appState.activePage
+  ){
+
+    showPage(
+      appState.activePage
+    );
+
+  }else{
+
+    showPage(
+      "dashboard"
+    );
+
+  }
+
+  updateTrackerProgress();
 
 }
 
 
-/* =========================================================
-   START
-========================================================= */
-
 document.addEventListener(
   "DOMContentLoaded",
-  initializeApp
+  init
 );
 
 </script>
